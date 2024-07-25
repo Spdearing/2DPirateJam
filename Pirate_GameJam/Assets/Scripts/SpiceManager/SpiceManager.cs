@@ -1,30 +1,122 @@
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class SpiceManager : MonoBehaviour
 {
+    [Header("Strings")]
     [SerializeField] private string[] spiceNames;
-    
 
+    [Header("Buttons")]
+    [SerializeField] private Button[] spiceButtons;
+
+    [Header("Index For SpicePicked")]
+    [SerializeField] private int spicePickedIndex;
+
+    [Header("TMP_Text")]
+    [SerializeField] private TMP_Text displayText;
+
+    [Header("Bools")]
+    [SerializeField] private bool[] spicePicked;
 
     // Start is called before the first frame update
     void Start()
     {
-        spiceNames = new string[6];
+        // Initialize the spiceButtons array with the correct size
+        spiceButtons = new Button[6];
+        spiceButtons[0] = GameObject.Find("Ground Sage").GetComponent<Button>();
+        spiceButtons[1] = GameObject.Find("Tarragon").GetComponent<Button>();
+        spiceButtons[2] = GameObject.Find("Dill Pollen").GetComponent<Button>();
+        spiceButtons[3] = GameObject.Find("Chervil").GetComponent<Button>();
+        spiceButtons[4] = GameObject.Find("Spearmint").GetComponent<Button>();
+        spiceButtons[5] = GameObject.Find("Sumac").GetComponent<Button>();
+
+        spicePicked = new bool[6];
+        spicePicked[0] = false;
+        spicePicked[1] = false;
+        spicePicked[2] = false;
+        spicePicked[3] = false;
+        spicePicked[4] = false;
+        spicePicked[5] = false;
+
+
+        displayText = GameManager.instance.ReturnSpiceDisplayNameText();
+
+        foreach (Button button in spiceButtons)
+        {
+            button.onClick.AddListener(() => DisplaySelectedSpice(button));
+        }
     }
 
-    // Update is called once per frame
-    void Update()
+    // This method will be called when a button is clicked
+    private void DisplaySelectedSpice(Button clickedButton)
     {
         
+        string spiceName = clickedButton.gameObject.name;
+        DetermineSpiceSelected(spiceName);
+
+
+        if (displayText != null)
+        {
+            displayText.text = spiceName + " has been selected";
+        }
+        else
+        {
+            Debug.LogError("Display text is null.");
+        }
     }
 
-    public void DisplaySelectedSpice()
+    private void DetermineSpiceSelected(string spiceName)
     {
-        string spiceName = gameObject.name;
+        switch(spiceName) 
+        {
+            case "Ground Sage":
 
-        GameManager.instance.ReturnSpiceDisplayNameText().text = spiceName + " has been selected";
+                spicePickedIndex = 0;
 
+                break;
+
+            case "Tarragon":
+
+                spicePickedIndex = 1;
+
+                break;
+
+            case "Dill Pollen":
+
+                spicePickedIndex = 2;
+
+                break;
+
+            case "Chervil":
+
+                spicePickedIndex = 3;
+
+                break;
+
+            case "Spearmint":
+
+                spicePickedIndex = 4;
+
+                break;
+
+            case "Sumac":
+
+                spicePickedIndex = 5;
+
+                break;
+
+            default:
+
+                break;
+        }
+    }
+
+
+    public bool ReturnSpicePicked()
+    {
+        return this.spicePicked[spicePickedIndex];
     }
 }

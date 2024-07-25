@@ -10,14 +10,36 @@ public class GameManager : MonoBehaviour
     [SerializeField] private TMP_Text spiceDisplayText;
 
 
-    // Start is called before the first frame update
+    void Awake()
+    {
+        if (instance == null)
+        {
+            instance = this;
+            DontDestroyOnLoad(gameObject);
+        }
+        else if (instance != this)
+        {
+            Destroy(gameObject);
+        }
+    }
+
     void Start()
     {
-        spiceDisplayText = GameObject.Find("SpiceSelectedDisplay").GetComponent<TMP_Text>();
+        if (spiceDisplayText == null)
+        {
+            spiceDisplayText = GameObject.Find("DisplayText").GetComponent<TMP_Text>();
+        }
+
+        spiceDisplayText.text = string.Empty;
     }
+
 
     public TMP_Text ReturnSpiceDisplayNameText()
     {
+        if (spiceDisplayText == null)
+        {
+            Debug.LogError("Spice Display Text is not assigned.");
+        }
         return this.spiceDisplayText;
     }
 }
