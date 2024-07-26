@@ -69,15 +69,16 @@ public class SpiceSpawner : MonoBehaviour
         {
             pouring = true;
         }
-        else if (Input.GetKeyUp(KeyCode.Mouse1))
+        else if (Input.GetKeyUp(KeyCode.Mouse1) && pouring)
         {
             stillPouring = true;
             maxParticles = 45f;
         }
 
-        if (inPosition && pouring && !stillPouring)
+        if (inPosition && pouring && !stillPouring && maxParticles<1000f)
         {
-            maxParticles = Mathf.Lerp(maxParticles, 1000f, ((Mathf.Lerp(0f, 50f, (.5f * Time.deltaTime))) * Time.deltaTime));
+            //Debug.Log(Mathf.Lerp(2f, 10f, Time.deltaTime));
+            maxParticles = Mathf.Lerp(1, 1000, Mathf.Pow(1f, Time.deltaTime));
             emissionModule.rateOverTime = new ParticleSystem.MinMaxCurve(minParticles, maxParticles);
         }
 
@@ -117,6 +118,6 @@ public class SpiceSpawner : MonoBehaviour
     {
         spicePourPercent = Mathf.FloorToInt(100 * (spiceAmount / temporarySpiceGoal));
         spicePercentText.text = spicePourPercent + "%";
-        Debug.Log(spiceAmount);
+        //Debug.Log(spiceAmount);
     }
 }
