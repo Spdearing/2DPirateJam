@@ -9,6 +9,10 @@ public class SpiceManager : MonoBehaviour
     [Header("Strings")]
     [SerializeField] private string[] spiceNames;
 
+
+    [Header("Spice Amount")]
+    [SerializeField] private int[] spiceAmount;
+
     [Header("Buttons")]
     [SerializeField] private Button[] spiceButtons;
 
@@ -32,6 +36,14 @@ public class SpiceManager : MonoBehaviour
         spiceButtons[3] = GameObject.Find("Chervil").GetComponent<Button>();
         spiceButtons[4] = GameObject.Find("Spearmint").GetComponent<Button>();
         spiceButtons[5] = GameObject.Find("Sumac").GetComponent<Button>();
+
+        spiceNames = new string[6];
+        spiceNames[0] = "Ground Sage";
+        spiceNames[1] = "Tarragon";
+        spiceNames[2] = "Dill Pollen";
+        spiceNames[3] = "Chervil";
+        spiceNames[4] = "Spearmint";
+        spiceNames[5] = "Sumac";
 
         spicePicked = new bool[6];
         spicePicked[0] = false;
@@ -118,5 +130,15 @@ public class SpiceManager : MonoBehaviour
     public bool ReturnSpicePicked()
     {
         return this.spicePicked[spicePickedIndex];
+    }
+
+    public int ReturnSpiceAmount(int amount) 
+    {
+        return this.spiceAmount[amount];
+    }
+
+    public string ReturnSpiceNames(int number)
+    {
+        return this.spiceNames[number];
     }
 }
