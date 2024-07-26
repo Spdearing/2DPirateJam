@@ -5,9 +5,11 @@ using TMPro;
 
 public class SpiceSpawner : MonoBehaviour
 {
-    private float spiceAmount = 0f;
     private ParticleSystem spiceParticleSystem;
+    private float spiceAmount = 0f;
     private float spicePourPercent;
+    private float elapsedTime = 0f; // Add this as a member variable to keep track of elapsed time
+    private float duration = 10f; // The total duration for ramping up particles
     [SerializeField] private GameObject spiceHolder;
     [SerializeField] private GameObject pourSpicePos;
     [SerializeField] private ParticleSystem.EmissionModule emissionModule;
@@ -73,12 +75,16 @@ public class SpiceSpawner : MonoBehaviour
         {
             stillPouring = true;
             maxParticles = 45f;
+            elapsedTime = 0f;
         }
 
         if (inPosition && pouring && !stillPouring && maxParticles<1000f)
         {
-            //Debug.Log(Mathf.Lerp(2f, 10f, Time.deltaTime));
-            maxParticles = Mathf.Lerp(1, 1000, Mathf.Pow(1f, Time.deltaTime));
+            elapsedTime += Time.deltaTime;
+            float t = Mathf.Clamp01(elapsedTime / duration);
+            float exponent = 2f;
+            t = Mathf.Pow(t, exponent);
+            maxParticles = Mathf.Lerp(minParticles, 1000, t);
             emissionModule.rateOverTime = new ParticleSystem.MinMaxCurve(minParticles, maxParticles);
         }
 
