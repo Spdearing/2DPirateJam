@@ -2090,8 +2090,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -1.2719, y: -41.011}
-  m_SizeDelta: {x: 99.529, y: 257.5321}
+  m_AnchoredPosition: {x: -0.37601, y: -0.84944}
+  m_SizeDelta: {x: 99.708, y: 217.37}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1041643373
 MonoBehaviour:
@@ -2107,10 +2107,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   spiceNames: []
   randomSpiceNames: []
-  spiceNamesUsed: []
+  spices: []
+  spiceUsed: []
   spiceAmountsNeeded: []
   spiceManager: {fileID: 0}
   spiceNameText: []
+  spiceAmount: []
 --- !u!114 &1041643374
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2601,8 +2603,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 0, y: 0}
+  m_AnchoredPosition: {x: -205.66617, y: 53.71881}
+  m_SizeDelta: {x: 411.33, y: 107.44}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1295184800
 MonoBehaviour:
@@ -3190,6 +3192,7 @@ MonoBehaviour:
   spicePickedIndex: 0
   displayText: {fileID: 0}
   spicePicked: 
+  spices: []
 --- !u!4 &1909407775
 Transform:
   m_ObjectHideFlags: 0
