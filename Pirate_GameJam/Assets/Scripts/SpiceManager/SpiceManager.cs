@@ -24,8 +24,6 @@ public class SpiceManager : MonoBehaviour
     [Header("Bools")]
     [SerializeField] private bool[] spicePicked;
 
-    [Header("Array Of Classes")]
-    [SerializeField] private Spice[] spices;
 
     void Start()
     {
@@ -54,15 +52,6 @@ public class SpiceManager : MonoBehaviour
         spicePicked[4] = false;
         spicePicked[5] = false;
         
-        spices = new Spice[6];
-        spices[0] = new GroundSage();
-        spices[1] = new Tarragon();
-        spices[2] = new DillPollen();
-        spices[3] = new Chervil();
-        spices[4] = new Spearmint();
-        spices[5] = new Sumac();
-
-
 
         displayText = GameManager.instance.ReturnSpiceDisplayNameText();
 
@@ -90,53 +79,6 @@ public class SpiceManager : MonoBehaviour
         }
     }
 
-    //private void DetermineSpiceSelected(string spiceName)
-    //{
-    //    switch (spiceName)
-    //    {
-    //        case "Ground Sage":
-
-    //            spicePickedIndex = 0;
-
-    //            break;
-
-    //        case "Tarragon":
-
-    //            spicePickedIndex = 1;
-
-    //            break;
-
-    //        case "Dill Pollen":
-
-    //            spicePickedIndex = 2;
-
-    //            break;
-
-    //        case "Chervil":
-
-    //            spicePickedIndex = 3;
-
-    //            break;
-
-    //        case "Spearmint":
-
-    //            spicePickedIndex = 4;
-
-    //            break;
-
-    //        case "Sumac":
-
-    //            spicePickedIndex = 5;
-
-    //            break;
-
-    //        default:
-
-    //            break;
-    //    }
-    //}
-
-
     public bool ReturnSpicePicked()
     {
         return this.spicePicked[spicePickedIndex];
@@ -152,53 +94,6 @@ public class SpiceManager : MonoBehaviour
         return this.spiceNames[number];
     }
 
-    [System.Serializable]
-    public class Spice
-    {
-        public string nameOfSpice;
-        public float randomAmount;
 
-        public Spice(string name, float amount)
-        {
-            nameOfSpice = name;
-            randomAmount = amount;
-        }
-    }
-
-    [System.Serializable]
-    public class GroundSage : Spice
-    {
-        public GroundSage() : base("Ground Sage", Random.Range(2000, 4001)) { }
-    }
-
-    [System.Serializable]
-    public class Tarragon : Spice
-    {
-        public Tarragon() : base("Tarragon", Random.Range(2000, 4001)) { }
-    }
-
-    [System.Serializable]
-    public class DillPollen : Spice
-    {
-        public DillPollen() : base("Dill Pollen", Random.Range(2000, 4001)) { }
-    }
-
-    [System.Serializable]
-    public class Chervil : Spice
-    {
-        public Chervil() : base("Chervil", Random.Range(2000, 4001)) { }
-    }
-
-    [System.Serializable]
-    public class Spearmint : Spice
-    {
-        public Spearmint() : base("Spearmint", Random.Range(2000, 4001)) { }
-    }
-
-    [System.Serializable]
-    public class Sumac : Spice
-    {
-        public Sumac() : base("Sumac", Random.Range(2000, 4001)) { }
-    }
 
 }

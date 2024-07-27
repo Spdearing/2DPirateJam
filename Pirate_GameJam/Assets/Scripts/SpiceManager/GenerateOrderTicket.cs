@@ -1,8 +1,10 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using TMPro;
 using UnityEngine;
 using UnityEngine.Rendering;
+using UnityEngine.UI;
 
 public class GenerateOrderTicket : MonoBehaviour
 {
@@ -14,7 +16,8 @@ public class GenerateOrderTicket : MonoBehaviour
     [SerializeField] private Spice[] spices;
 
     [Header("Used Names")]
-    [SerializeField] private List<Spice> spiceUsed;
+    [SerializeField] private List<Spice> spiceUsedInTicket;
+    [SerializeField] private List<Spice> spiceSelected;
 
     [Header("Generated Spice Amounts Needed")]
     [SerializeField] private float[] spiceAmountsNeeded;
@@ -26,9 +29,18 @@ public class GenerateOrderTicket : MonoBehaviour
     [SerializeField] private TMP_Text[] spiceNameText;
     [SerializeField] private TMP_Text[] spiceAmount;
 
+    [Header("Buttons")]
+    [SerializeField] private Button[] spiceButtons;
+
+    [Header("TMP_Text")]
+    [SerializeField] private TMP_Text displayText;
+
     // Start is called before the first frame update
     void Start()
     {
+
+        displayText = GameManager.instance.ReturnSpiceDisplayNameText();
+
         spiceManager = GameManager.instance.ReturnSpiceManager();
         spiceNames = new string[6];
         spiceNameText = new TMP_Text[3];
@@ -49,6 +61,14 @@ public class GenerateOrderTicket : MonoBehaviour
         spices[4] = new Spearmint();
         spices[5] = new Sumac();
 
+        spiceButtons = new Button[6];
+        spiceButtons[0] = GameObject.Find("Ground Sage").GetComponent<Button>();
+        spiceButtons[1] = GameObject.Find("Tarragon").GetComponent<Button>();
+        spiceButtons[2] = GameObject.Find("Dill Pollen").GetComponent<Button>();
+        spiceButtons[3] = GameObject.Find("Chervil").GetComponent<Button>();
+        spiceButtons[4] = GameObject.Find("Spearmint").GetComponent<Button>();
+        spiceButtons[5] = GameObject.Find("Sumac").GetComponent<Button>();
+
 
         for (int i = 0; i < spiceNameText.Length; i++)
         {
@@ -60,12 +80,49 @@ public class GenerateOrderTicket : MonoBehaviour
             spiceAmount[i].text = string.Empty;
         }
 
+        foreach (Button button in spiceButtons)
+        {
+            button.onClick.AddListener(() => DisplaySelectedSpice(button));
+        }
+
         CreateTheList();
 
         GenerateOrder();
 
 
     }
+
+    private void DisplaySelectedSpice(Button clickedButton)
+    {
+        string spiceName = clickedButton.gameObject.name;
+        Debug.Log(spiceName);
+
+        if (spiceUsedInTicket.Any(spice => spice.nameOfSpice == spiceName))
+        {
+            SelectSpice(spiceName);
+
+            if (displayText != null)
+            {
+                displayText.text = spiceName + " has been selected";
+            }
+            else
+            {
+                Debug.LogError("Display text is null.");
+            }
+        }
+        else
+        {
+            if (displayText != null)
+            {
+                displayText.text = "You do not need that spice right now";
+            }
+            else
+            {
+                Debug.LogError("Display text is null.");
+            }
+        }
+    }
+
 
     public void GenerateOrder()
     {
@@ -79,19 +136,19 @@ public class GenerateOrderTicket : MonoBehaviour
 
             Spice randomSpiceHolder = spices[randomSpiceName];
             
-            while(spiceUsed.Contains(randomSpiceHolder))
+            while(spiceUsedInTicket.Contains(randomSpiceHolder))
             {
                 randomSpiceName = Random.Range(0, spiceNames.Length);
                 randomSpiceHolder = spices[randomSpiceName];
             }
 
-            spiceUsed.Add(randomSpiceHolder);
+            spiceUsedInTicket.Add(randomSpiceHolder);
             
             randomSpiceNames[i] = spices[randomSpiceName].nameOfSpice;
 
             spiceNameText[i].text = randomSpiceNames[i];
 
-            float randomSpiceAmount = spices[randomSpiceName].randomAmount;
+            float randomSpiceAmount = spices[randomSpiceName].randomMaxAmount;
 
             spiceAmount[i].text = randomSpiceAmount.ToString(); 
         }
@@ -105,53 +162,93 @@ public class GenerateOrderTicket : MonoBehaviour
         }
     }
 
+    public void SelectSpice(string spiceName)
+    {
+        for(int i = 0; i < spices.Length; i++ )
+        {
+            if (spiceName == spices[i].nameOfSpice)
+            {
+                spiceSelected.Add(spices[i]);
+            }
+            else
+            {
+                displayText.text = "You do not need that spice right now";
+            }
+        }
+    }
+
+    public void ChangeSpiceAmount()
+    {
+        
+    }
+
     [System.Serializable]
     public class Spice
     {
         public string nameOfSpice;
-        public float randomAmount;
+        public float startingSpiceAmount;
+        public float randomMaxAmount;
 
-        public Spice(string name, float amount)
+        public Spice(string name, float startingAmount, float maxAmount)
         {
             nameOfSpice = name;
-            randomAmount = amount;
+            startingSpiceAmount = startingAmount;
+            randomMaxAmount = maxAmount;
         }
     }
 
     [System.Serializable]
     public class GroundSage : Spice
     {
-        public GroundSage() : base("Ground Sage", Random.Range(2000, 4001)) { }
+        public GroundSage() : base("Ground Sage", 0 , Random.Range(2000, 4001)) 
+        {
+        
+        }
     }
 
     [System.Serializable]
     public class Tarragon : Spice
     {
-        public Tarragon() : base("Tarragon", Random.Range(2000, 4001)) { }
+        public Tarragon() : base("Tarragon", 0 ,  Random.Range(2000, 4001))
+        { 
+        
+        }
     }
 
     [System.Serializable]
     public class DillPollen : Spice
     {
-        public DillPollen() : base("Dill Pollen", Random.Range(2000, 4001)) { }
+        public DillPollen() : base("Dill Pollen", 0 , Random.Range(2000, 4001)) 
+        {
+        
+        }
     }
 
     [System.Serializable]
     public class Chervil : Spice
     {
-        public Chervil() : base("Chervil", Random.Range(2000, 4001)) { }
+        public Chervil() : base("Chervil", 0 , Random.Range(2000, 4001))
+        {
+        
+        }
     }
 
     [System.Serializable]
     public class Spearmint : Spice
     {
-        public Spearmint() : base("Spearmint", Random.Range(2000, 4001)) { }
+        public Spearmint() : base("Spearmint", 0 , Random.Range(2000, 4001)) 
+        {
+        
+        }
     }
 
     [System.Serializable]
     public class Sumac : Spice
     {
-        public Sumac() : base("Sumac", Random.Range(2000, 4001)) { }
+        public Sumac() : base("Sumac", 0 , Random.Range(2000, 4001)) 
+        { 
+        
+        }
     }
 
 }
