@@ -6,8 +6,8 @@ using TMPro;
 public class SpiceSpawner : MonoBehaviour
 {
     private ParticleSystem spiceParticleSystem;
-    private float spiceAmount = 0f;
-    private float spicePourPercent;
+    private float spiceAmount = 0f; // Keeps track of how much spice has hit the bowl
+    private float spicePourPercent; // The percentage for how close the player is to the correct amount of spice
     private float elapsedTime = 0f; // Add this as a member variable to keep track of elapsed time
     private float duration = 10f; // The total duration for ramping up particles
     [SerializeField] private GameObject spiceHolder;
@@ -21,7 +21,7 @@ public class SpiceSpawner : MonoBehaviour
     [SerializeField] private bool stillPouring;
     [SerializeField] private bool inPosition = false;
     [SerializeField] private TMP_Text spicePercentText;
-    public float temporarySpiceGoal;
+    public float temporarySpiceGoal; //The spiceAmount goal
 
     private void Start()
     {
@@ -117,13 +117,13 @@ public class SpiceSpawner : MonoBehaviour
         mousePos = Input.mousePosition;
         mousePos = Camera.main.ScreenToWorldPoint(mousePos);
 
-        spiceHolder.transform.position = new Vector3(Mathf.Lerp(spiceHolder.transform.position.x, mousePos.x, (10f * Time.deltaTime)), Mathf.Lerp(spiceHolder.transform.position.y, mousePos.y, (5f * Time.deltaTime)), 0.0f);
+        spiceHolder.transform.position = new Vector3(Mathf.Lerp(spiceHolder.transform.position.x, mousePos.x, (15f * Time.deltaTime)), Mathf.Lerp(spiceHolder.transform.position.y, mousePos.y, (15f * Time.deltaTime)), 0.0f);
     }
 
     private void UpdateSpicePercent()
     {
+        //Calculates the percentage of how close the player is to the spice goal
         spicePourPercent = Mathf.FloorToInt(100 * (spiceAmount / temporarySpiceGoal));
         spicePercentText.text = spicePourPercent + "%";
-        //Debug.Log(spiceAmount);
     }
 }
