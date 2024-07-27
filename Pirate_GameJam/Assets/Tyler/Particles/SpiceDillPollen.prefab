@@ -10,7 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1373119032836234881}
   m_Layer: 0
-  m_Name: SpiceTarragon
+  m_Name: SpiceDillPollen
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -24,7 +24,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1614644537370303481}
   serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 8.185185, z: -5.000792}
   m_LocalScale: {x: 0.018518519, y: 0.018518519, z: 0.018518519}
   m_ConstrainProportionsScale: 0
@@ -343,9 +343,9 @@ ParticleSystem:
         m_RotationOrder: 4
     startColor:
       serializedVersion: 2
-      minMaxState: 2
-      minColor: {r: 0.5188679, g: 0.37854514, b: 0.20314167, a: 1}
-      maxColor: {r: 0.2765664, g: 0.5188679, b: 0.2974303, a: 1}
+      minMaxState: 0
+      minColor: {r: 1, g: 0.55423945, b: 0, a: 1}
+      maxColor: {r: 1, g: 0.75825316, b: 0.24056602, a: 1}
       maxGradient:
         serializedVersion: 2
         key0: {r: 1, g: 0, b: 0, a: 1}
@@ -1438,7 +1438,7 @@ ParticleSystem:
         key5: {r: 0, g: 0, b: 0, a: 0}
         key6: {r: 0, g: 0, b: 0, a: 0}
         key7: {r: 0, g: 0, b: 0, a: 0}
-        ctime0: 386
+        ctime0: 0
         ctime1: 65535
         ctime2: 0
         ctime3: 0
@@ -1446,7 +1446,7 @@ ParticleSystem:
         ctime5: 0
         ctime6: 0
         ctime7: 0
-        atime0: 15035
+        atime0: 0
         atime1: 65535
         atime2: 65535
         atime3: 0
