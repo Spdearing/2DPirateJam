@@ -44,6 +44,9 @@ public class GenerateOrderTicket : MonoBehaviour
     [Header("Bools")]
     [SerializeField] private bool pourButtonPressed;
     [SerializeField] private bool correctSelection;
+    [SerializeField] private bool successfulRatio;
+    [SerializeField] private bool failedRatio;
+    [SerializeField] private bool orderSubmitted;
 
     private Dictionary<string, TMP_Text> spiceAmountDictionary;
 
@@ -57,7 +60,9 @@ public class GenerateOrderTicket : MonoBehaviour
 
     private void Initialize()
     {
-        orderRotations = 0;
+        orderSubmitted = false;
+        successfulRatio = false;
+        failedRatio = false;
         correctSelection = false;
         displayText = GameManager.instance.ReturnSpiceDisplayNameText();
         spiceManager = GameManager.instance.ReturnSpiceManager();
@@ -128,6 +133,12 @@ public class GenerateOrderTicket : MonoBehaviour
         }
     }
 
+    private void ResetRatioCheck()
+    {
+        successfulRatio = false;
+        failedRatio = false;
+    }
+
     private void CreateSpiceAmountDictionary()
     {
         spiceAmountDictionary = new Dictionary<string, TMP_Text>();
@@ -142,38 +153,53 @@ public class GenerateOrderTicket : MonoBehaviour
 
     private void DisplaySelectedSpice(Button clickedButton)
     {
-        string spiceName = clickedButton.gameObject.name;
-
-        if (spiceUsedInTicket.Any(spice => spice.nameOfSpice == spiceName))
+        if(orderSubmitted == false)
         {
-            SelectSpice(spiceName);
+            string spiceName = clickedButton.gameObject.name;
 
-            if (displayText != null)
+            if (spiceUsedInTicket.Any(spice => spice.nameOfSpice == spiceName))
             {
-                displayText.text = spiceName + " has been selected";
+                SelectSpice(spiceName);
+
+                if (displayText != null)
+                {
+                    displayText.text = spiceName + " has been selected";
+                }
+                else
+                {
+                    Debug.LogError("Display text is null.");
+                }
             }
             else
             {
-                Debug.LogError("Display text is null.");
-            }
-        }
-        else
-        {
-            if (displayText != null)
-            {
-                displayText.text = "You do not need that spice right now";
-            }
-            else
-            {
-                Debug.LogError("Display text is null.");
+                if (displayText != null)
+                {
+                    correctSelection = false;
+                    displayText.text = "You do not need that spice right now";
+                }
+                else
+                {
+                    Debug.LogError("Display text is null.");
+                }
             }
         }
     }
 
     public void GenerateOrder()
     {
-        orderRotations++;
+        correctSelection = false;
+        orderSubmitted = false;
+        displayText.text = string.Empty;
+        InitializeSpices();
+        ResetRatioCheck();
+        spiceUsedInTicket.Clear();
         int randomSpiceIndex = Random.Range(2, 4);
+
+        if(randomSpiceIndex == 2)
+        {
+            spiceNameText[2].text = string.Empty;
+            spiceAmountText[2].text = string.Empty;
+        }
 
         if (randomSpiceIndex > spices.Length)
         {
@@ -183,7 +209,7 @@ public class GenerateOrderTicket : MonoBehaviour
 
         randomSpiceNames = new string[randomSpiceIndex];
 
-        ClearSpiceUsedInTicketIfNecessary();
+        //ClearSpiceUsedInTicketIfNecessary();
 
         for (int i = 0; i < randomSpiceIndex; i++)
         {
@@ -224,14 +250,6 @@ public class GenerateOrderTicket : MonoBehaviour
         return randomSpiceName;
     }
 
-    private void ClearSpiceUsedInTicketIfNecessary()
-    {
-        if (orderRotations == 3)
-        {
-            spiceUsedInTicket.Clear();
-            orderRotations = 0;
-        }
-    }
 
     void CreateTheList()
     {
@@ -269,21 +287,33 @@ public class GenerateOrderTicket : MonoBehaviour
     public void GeneratePurity()
     {
         float totalPurity = spiceUsedInTicket.Sum(spice => spice.spicePurity);
-        float averagePurity = totalPurity / spiceUsedInTicket.Count;
+        float averagePurity = Mathf.FloorToInt(totalPurity / spiceUsedInTicket.Count);
 
         SubmitOrder(averagePurity);
-        displayText.text = currentTickets + " Current Tickets have been completed ";
+
+        if(successfulRatio)
+        {
+            displayText.text = currentTickets + " Current Tickets have been completed , your purity was " + averagePurity + " %, Congradulations! ";
+        }
+        else if(failedRatio)
+        {
+            displayText.text = currentTickets + " Current Tickets have been completed , your purity was " + averagePurity + " %, You did not hit the required purity ";
+        }
+        
     }
 
     void SubmitOrder(float averagePurity)
     {
+        orderSubmitted = true;
         if (averagePurity > 75.0f)
         {
+            successfulRatio = true;
             currentTickets++;
             ticketsCompleted = currentTickets;
         }
         else
         {
+            failedRatio = true;
             ticketsCompleted = currentTickets;
         }
     }
@@ -336,6 +366,11 @@ public class GenerateOrderTicket : MonoBehaviour
     public bool ReturnCorrectSelection()
     {
         return this.correctSelection;
+    }
+
+    public bool ReturnOrderSubmitted()
+    {
+        return this.orderSubmitted;
     }
 }
 

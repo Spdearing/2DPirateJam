@@ -61,7 +61,7 @@ public class SpiceSpawner : MonoBehaviour
     }
     private void PourSpice()
     {
-        if (generateTicket.ReturnCorrectSelection() == true)
+        if (generateTicket.ReturnCorrectSelection() == true && !generateTicket.ReturnOrderSubmitted())
         {
             //Checks if the player is holding down left click, if they are then the spice particles spawn with a max of 250
             if (spiceHolder.transform.position.x < (pourSpicePos.transform.position.x + .2f) && spiceHolder.transform.position.x > (pourSpicePos.transform.position.x - .2f) &&

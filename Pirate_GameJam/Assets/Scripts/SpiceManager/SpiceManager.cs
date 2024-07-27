@@ -55,29 +55,8 @@ public class SpiceManager : MonoBehaviour
 
         displayText = GameManager.instance.ReturnSpiceDisplayNameText();
 
-        foreach (Button button in spiceButtons)
-        {
-            button.onClick.AddListener(() => DisplaySelectedSpice(button));
-        }
     }
 
-    // This method will be called when a button is clicked
-    private void DisplaySelectedSpice(Button clickedButton)
-    {
-
-        string spiceName = clickedButton.gameObject.name;
-        //DetermineSpiceSelected(spiceName);
-
-
-        if (displayText != null)
-        {
-            displayText.text = spiceName + " has been selected";
-        }
-        else
-        {
-            Debug.LogError("Display text is null.");
-        }
-    }
 
     public bool ReturnSpicePicked()
     {
