@@ -39,6 +39,9 @@ public class GenerateOrderTicket : MonoBehaviour
     [Header("TMP_Text")]
     [SerializeField] private TMP_Text displayText;
 
+    [Header("Bools")]
+    [SerializeField] private bool pourButtonPressed;
+
     private Dictionary<string, TMP_Text> spiceAmountDictionary;
 
     // Start is called before the first frame update
@@ -182,15 +185,7 @@ public class GenerateOrderTicket : MonoBehaviour
 
         if (selectedSpice != null && spiceUsedInTicket.Contains(selectedSpice))
         {
-            if (!spiceSelected.Contains(selectedSpice))
-            {
                 spiceSelected.Insert(0, selectedSpice);
-                Debug.Log(spiceSelected[0].nameOfSpice);
-            }
-            else
-            {
-                displayText.text = "You already selected this spice.";
-            }
         }
         else
         {
