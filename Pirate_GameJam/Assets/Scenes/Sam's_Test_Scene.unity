@@ -560,7 +560,7 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 1041643373}
         m_TargetAssemblyTypeName: GenerateOrderTicket, Assembly-CSharp
-        m_MethodName: PourSpice
+        m_MethodName: GeneratePurity
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -773,6 +773,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   spiceDisplayText: {fileID: 0}
   spiceManager: {fileID: 0}
+  generateTicket: {fileID: 0}
 --- !u!224 &357611023
 RectTransform:
   m_ObjectHideFlags: 0
@@ -1090,6 +1091,7 @@ MonoBehaviour:
   inPosition: 0
   spicePercentText: {fileID: 0}
   temporarySpiceGoal: 2000
+  generateTicket: {fileID: 0}
 --- !u!199 &478264428
 ParticleSystemRenderer:
   serializedVersion: 6
