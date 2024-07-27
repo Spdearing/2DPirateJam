@@ -28,7 +28,7 @@ public class SpiceSpawner : MonoBehaviour
         temporarySpiceGoal = 2000f;
         stillPouring = false;
         pouring = false;
-        spicePercentText = GameObject.Find("SpicePercentText").GetComponent<TMP_Text>();
+        //spicePercentText = GameObject.Find("SpicePercentText").GetComponent<TMP_Text>();
         pourSpicePos = GameObject.Find("PourSpicePosition");
         spiceHolder = GameObject.Find("SpiceParticleHolder");
         spiceParticleSystem = GetComponent<ParticleSystem>();
@@ -46,7 +46,7 @@ public class SpiceSpawner : MonoBehaviour
         {
             MoveSpiceToPour();
         }
-        UpdateSpicePercent();
+        //UpdateSpicePercent();
     }
     void OnParticleCollision(GameObject other)
     {
