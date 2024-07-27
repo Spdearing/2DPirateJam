@@ -15,6 +15,8 @@ public class GenerateOrderTicket : MonoBehaviour
     [Header("Floats")]
     [SerializeField] private float spicePourAmount;
     [SerializeField] private float pouredAmount;
+    [SerializeField] private float currentTickets;
+    [SerializeField] private float ticketsCompleted;
 
     [Header("Array Of Classes")]
     [SerializeField] private Spice[] spices;
@@ -41,12 +43,14 @@ public class GenerateOrderTicket : MonoBehaviour
 
     [Header("Bools")]
     [SerializeField] private bool pourButtonPressed;
+    [SerializeField] private bool correctSelection;
 
     private Dictionary<string, TMP_Text> spiceAmountDictionary;
 
     // Start is called before the first frame update
     void Start()
     {
+        correctSelection = false;
         displayText = GameManager.instance.ReturnSpiceDisplayNameText();
 
         spiceManager = GameManager.instance.ReturnSpiceManager();
@@ -142,6 +146,7 @@ public class GenerateOrderTicket : MonoBehaviour
 
     public void GenerateOrder()
     {
+        
         int randomSpiceIndex = Random.Range(2, 4);
 
         randomSpiceNames = new string[randomSpiceIndex];
@@ -151,6 +156,11 @@ public class GenerateOrderTicket : MonoBehaviour
             int randomSpiceName = Random.Range(0, spiceNames.Length);
 
             Spice randomSpiceHolder = spices[randomSpiceName];
+
+            if(spiceUsedInTicket.Count == 6)
+            {
+                spiceUsedInTicket.Clear();
+            }
 
             while (spiceUsedInTicket.Contains(randomSpiceHolder))
             {
@@ -185,10 +195,12 @@ public class GenerateOrderTicket : MonoBehaviour
 
         if (selectedSpice != null && spiceUsedInTicket.Contains(selectedSpice))
         {
-                spiceSelected.Insert(0, selectedSpice);
+            correctSelection = true;
+            spiceSelected.Insert(0, selectedSpice);
         }
         else
         {
+            correctSelection = false;
             Debug.Log("Spice was not put in the list");
         }
     }
@@ -209,7 +221,20 @@ public class GenerateOrderTicket : MonoBehaviour
         }
         averagePurity = totalPurity / spiceUsedInTicket.Count;
 
-        Debug.Log(averagePurity);
+        SubmitOrder(averagePurity);
+
+        displayText.text = currentTickets + " Current Tickets have been completed ";
+    }
+
+    void SubmitOrder(float averagePurity)
+    {
+        if (averagePurity > 75.0f)
+        {
+            currentTickets++;
+            ticketsCompleted = currentTickets;
+        }
+        else
+            ticketsCompleted = currentTickets;
     }
 
     void UpdateSpiceAmount(string spiceName)
@@ -256,6 +281,12 @@ public class GenerateOrderTicket : MonoBehaviour
             return (null, null);
         }
     }
+
+    public bool ReturnCorrectSelection()
+    {
+        return this.correctSelection;
+    }
+
 }
 
 [System.Serializable]

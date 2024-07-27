@@ -61,55 +61,58 @@ public class SpiceSpawner : MonoBehaviour
     }
     private void PourSpice()
     {
-        //Checks if the player is holding down left click, if they are then the spice particles spawn with a max of 250
-        if (spiceHolder.transform.position.x < (pourSpicePos.transform.position.x + .2f) && spiceHolder.transform.position.x > (pourSpicePos.transform.position.x - .2f) &&
-            spiceHolder.transform.position.y < (pourSpicePos.transform.position.y + .2f) && spiceHolder.transform.position.y > (pourSpicePos.transform.position.y - .2f))
+        if (generateTicket.ReturnCorrectSelection() == true)
         {
-            inPosition = true;
-        }
-        else
-        {
-            inPosition = false;
-        }
+            //Checks if the player is holding down left click, if they are then the spice particles spawn with a max of 250
+            if (spiceHolder.transform.position.x < (pourSpicePos.transform.position.x + .2f) && spiceHolder.transform.position.x > (pourSpicePos.transform.position.x - .2f) &&
+                spiceHolder.transform.position.y < (pourSpicePos.transform.position.y + .2f) && spiceHolder.transform.position.y > (pourSpicePos.transform.position.y - .2f))
+            {
+                inPosition = true;
+            }
+            else
+            {
+                inPosition = false;
+            }
 
-        if (Input.GetKeyDown(KeyCode.Mouse1) && !pouring)
-        {
-            pouring = true;
-        }
-        else if (Input.GetKeyUp(KeyCode.Mouse1) && pouring)
-        {
-            stillPouring = true;
-            maxParticles = 45f;
-            elapsedTime = 0f;
-        }
+            if (Input.GetKeyDown(KeyCode.Mouse1) && !pouring)
+            {
+                pouring = true;
+            }
+            else if (Input.GetKeyUp(KeyCode.Mouse1) && pouring)
+            {
+                stillPouring = true;
+                maxParticles = 45f;
+                elapsedTime = 0f;
+            }
 
-        if (inPosition && pouring && !stillPouring && maxParticles<1000f)
-        {
-            elapsedTime += Time.deltaTime;
-            float t = Mathf.Clamp01(elapsedTime / duration);
-            float exponent = 2f;
-            t = Mathf.Pow(t, exponent);
-            maxParticles = Mathf.Lerp(minParticles, 1000, t);
-            emissionModule.rateOverTime = new ParticleSystem.MinMaxCurve(minParticles, maxParticles);
-        }
+            if (inPosition && pouring && !stillPouring && maxParticles < 1000f)
+            {
+                elapsedTime += Time.deltaTime;
+                float t = Mathf.Clamp01(elapsedTime / duration);
+                float exponent = 2f;
+                t = Mathf.Pow(t, exponent);
+                maxParticles = Mathf.Lerp(minParticles, 1000, t);
+                emissionModule.rateOverTime = new ParticleSystem.MinMaxCurve(minParticles, maxParticles);
+            }
 
-        if (stillPouring && maxParticles>0f)
-        {
-            maxParticles = Mathf.Lerp(maxParticles, -10f, (1f * Time.deltaTime));
-            emissionModule.rateOverTime = new ParticleSystem.MinMaxCurve(minParticles, maxParticles);
-        }
+            if (stillPouring && maxParticles > 0f)
+            {
+                maxParticles = Mathf.Lerp(maxParticles, -10f, (1f * Time.deltaTime));
+                emissionModule.rateOverTime = new ParticleSystem.MinMaxCurve(minParticles, maxParticles);
+            }
 
-        if (maxParticles<1 && stillPouring)
-        {
-            maxParticles = 0f;
-            emissionModule.rateOverTime = new ParticleSystem.MinMaxCurve(minParticles, maxParticles);
-        }
+            if (maxParticles < 1 && stillPouring)
+            {
+                maxParticles = 0f;
+                emissionModule.rateOverTime = new ParticleSystem.MinMaxCurve(minParticles, maxParticles);
+            }
 
-        if (stillPouring && maxParticles == 0f)
-        {
-            pouring = false;
-            stillPouring = false;
-        }
+            if (stillPouring && maxParticles == 0f)
+            {
+                pouring = false;
+                stillPouring = false;
+            }
+        } 
     }
     private void MoveSpiceToPour()
     {
