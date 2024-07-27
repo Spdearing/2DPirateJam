@@ -199,6 +199,19 @@ public class GenerateOrderTicket : MonoBehaviour
         UpdateSpiceAmount(spiceSelected[0].nameOfSpice);
     }
 
+    public void GeneratePurity()
+    {
+        float averagePurity;
+        float totalPurity = 0;
+        for(int i = 0;i < spiceUsedInTicket.Count;i++)
+        {
+            totalPurity += spiceUsedInTicket[i].spicePurity;  
+        }
+        averagePurity = totalPurity / spiceUsedInTicket.Count;
+
+        Debug.Log(averagePurity);
+    }
+
     void UpdateSpiceAmount(string spiceName)
     {
         if (spiceAmountDictionary.TryGetValue(spiceName, out TMP_Text amountText))
@@ -209,6 +222,7 @@ public class GenerateOrderTicket : MonoBehaviour
                 amountText.text = selectedSpice.startingSpiceAmount.ToString();
                 float spicePourPercent = Mathf.FloorToInt(100 * (selectedSpice.startingSpiceAmount / selectedSpice.randomMaxAmount));
                 displayText.text = selectedSpice.nameOfSpice + " is now " + spicePourPercent + "% full";
+                spiceSelected[0].spicePurity = spicePourPercent;
             }
         }
         else
@@ -250,47 +264,51 @@ public class Spice
     public string nameOfSpice;
     public float startingSpiceAmount;
     public float randomMaxAmount;
+    public float spicePurity;
+    
 
-    public Spice(string name, float startingAmount, float maxAmount)
+    public Spice(string name, float startingAmount, float maxAmount, float purity)
     {
         nameOfSpice = name;
         startingSpiceAmount = startingAmount;
         randomMaxAmount = maxAmount;
+        spicePurity = purity;
+        
     }
 }
 
 [System.Serializable]
 public class GroundSage : Spice
 {
-    public GroundSage() : base("Ground Sage", 0, Random.Range(2000, 4001)) { }
+    public GroundSage() : base("Ground Sage", 0, Random.Range(2000, 4001), 0) { }
 }
 
 [System.Serializable]
 public class Tarragon : Spice
 {
-    public Tarragon() : base("Tarragon", 0, Random.Range(2000, 4001)) { }
+    public Tarragon() : base("Tarragon", 0, Random.Range(2000, 4001), 0) { }
 }
 
 [System.Serializable]
 public class DillPollen : Spice
 {
-    public DillPollen() : base("Dill Pollen", 0, Random.Range(2000, 4001)) { }
+    public DillPollen() : base("Dill Pollen", 0, Random.Range(2000, 4001), 0) { }
 }
 
 [System.Serializable]
 public class Chervil : Spice
 {
-    public Chervil() : base("Chervil", 0, Random.Range(2000, 4001)) { }
+    public Chervil() : base("Chervil", 0, Random.Range(2000, 4001), 0) { }
 }
 
 [System.Serializable]
 public class Spearmint : Spice
 {
-    public Spearmint() : base("Spearmint", 0, Random.Range(2000, 4001)) { }
+    public Spearmint() : base("Spearmint", 0, Random.Range(2000, 4001), 0) { }
 }
 
 [System.Serializable]
 public class Sumac : Spice
 {
-    public Sumac() : base("Sumac", 0, Random.Range(2000, 4001)) { }
+    public Sumac() : base("Sumac", 0, Random.Range(2000, 4001), 0) { }
 }

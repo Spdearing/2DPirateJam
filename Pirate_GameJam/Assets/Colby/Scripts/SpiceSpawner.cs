@@ -23,6 +23,9 @@ public class SpiceSpawner : MonoBehaviour
     [SerializeField] private TMP_Text spicePercentText;
     public float temporarySpiceGoal; //The spiceAmount goal
 
+
+    [SerializeField] private GenerateOrderTicket generateTicket;
+
     private void Start()
     {
         temporarySpiceGoal = 2000f;
@@ -34,6 +37,7 @@ public class SpiceSpawner : MonoBehaviour
         spiceParticleSystem = GetComponent<ParticleSystem>();
         emissionModule = spiceParticleSystem.emission;
         emissionModule.rateOverTime = new ParticleSystem.MinMaxCurve(0f, 0f);
+        generateTicket = GameManager.instance.ReturnGenerateOrderTicket();
     }
     private void Update()
     {
@@ -51,8 +55,9 @@ public class SpiceSpawner : MonoBehaviour
     void OnParticleCollision(GameObject other)
     {
         //Necessary for checking if the spice hits something
-        spiceAmount++;
+        //spiceAmount++;
         //Debug.Log(spiceAmount);
+        generateTicket.PourSpice();
     }
     private void PourSpice()
     {
