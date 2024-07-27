@@ -12,6 +12,10 @@ public class GenerateOrderTicket : MonoBehaviour
     [SerializeField] private string[] spiceNames;
     [SerializeField] private string[] randomSpiceNames;
 
+    [Header("Floats")]
+    [SerializeField] private float spicePourAmount;
+    [SerializeField] private float pouredAmount;
+
     [Header("Array Of Classes")]
     [SerializeField] private Spice[] spices;
 
@@ -27,7 +31,7 @@ public class GenerateOrderTicket : MonoBehaviour
 
     [Header("Display Texts")]
     [SerializeField] private TMP_Text[] spiceNameText;
-    [SerializeField] private TMP_Text[] spiceAmount;
+    [SerializeField] private TMP_Text[] spiceAmountText;
 
     [Header("Buttons")]
     [SerializeField] private Button[] spiceButtons;
@@ -35,10 +39,11 @@ public class GenerateOrderTicket : MonoBehaviour
     [Header("TMP_Text")]
     [SerializeField] private TMP_Text displayText;
 
+    private Dictionary<string, TMP_Text> spiceAmountDictionary;
+
     // Start is called before the first frame update
     void Start()
     {
-
         displayText = GameManager.instance.ReturnSpiceDisplayNameText();
 
         spiceManager = GameManager.instance.ReturnSpiceManager();
@@ -48,10 +53,10 @@ public class GenerateOrderTicket : MonoBehaviour
         spiceNameText[1] = GameObject.Find("SpiceTwo").GetComponent<TMP_Text>();
         spiceNameText[2] = GameObject.Find("SpiceThree").GetComponent<TMP_Text>();
 
-        spiceAmount = new TMP_Text[3];
-        spiceAmount[0] = GameObject.Find("SpiceAmountOne").GetComponent<TMP_Text>();
-        spiceAmount[1] = GameObject.Find("SpiceAmountTwo").GetComponent<TMP_Text>();
-        spiceAmount[2] = GameObject.Find("SpiceAmountThree").GetComponent<TMP_Text>();
+        spiceAmountText = new TMP_Text[3];
+        spiceAmountText[0] = GameObject.Find("SpiceAmountOne").GetComponent<TMP_Text>();
+        spiceAmountText[1] = GameObject.Find("SpiceAmountTwo").GetComponent<TMP_Text>();
+        spiceAmountText[2] = GameObject.Find("SpiceAmountThree").GetComponent<TMP_Text>();
 
         spices = new Spice[6];
         spices[0] = new GroundSage();
@@ -75,9 +80,9 @@ public class GenerateOrderTicket : MonoBehaviour
             spiceNameText[i].text = string.Empty;
         }
 
-        for (int i = 0; i < spiceAmount.Length; i++)
+        for (int i = 0; i < spiceAmountText.Length; i++)
         {
-            spiceAmount[i].text = string.Empty;
+            spiceAmountText[i].text = string.Empty;
         }
 
         foreach (Button button in spiceButtons)
@@ -86,16 +91,25 @@ public class GenerateOrderTicket : MonoBehaviour
         }
 
         CreateTheList();
-
+        CreateSpiceAmountDictionary();
         GenerateOrder();
+    }
 
-
+    private void CreateSpiceAmountDictionary()
+    {
+        spiceAmountDictionary = new Dictionary<string, TMP_Text>();
+        for (int i = 0; i < spiceNameText.Length; i++)
+        {
+            if (!string.IsNullOrEmpty(spiceNameText[i].text))
+            {
+                spiceAmountDictionary[spiceNameText[i].text] = spiceAmountText[i];
+            }
+        }
     }
 
     private void DisplaySelectedSpice(Button clickedButton)
     {
         string spiceName = clickedButton.gameObject.name;
-        Debug.Log(spiceName);
 
         if (spiceUsedInTicket.Any(spice => spice.nameOfSpice == spiceName))
         {
@@ -123,34 +137,34 @@ public class GenerateOrderTicket : MonoBehaviour
         }
     }
 
-
     public void GenerateOrder()
     {
         int randomSpiceIndex = Random.Range(2, 4);
-        
+
         randomSpiceNames = new string[randomSpiceIndex];
 
-        for (int i = 0; i < randomSpiceIndex ;i++)
+        for (int i = 0; i < randomSpiceIndex; i++)
         {
             int randomSpiceName = Random.Range(0, spiceNames.Length);
 
             Spice randomSpiceHolder = spices[randomSpiceName];
-            
-            while(spiceUsedInTicket.Contains(randomSpiceHolder))
+
+            while (spiceUsedInTicket.Contains(randomSpiceHolder))
             {
                 randomSpiceName = Random.Range(0, spiceNames.Length);
                 randomSpiceHolder = spices[randomSpiceName];
             }
 
             spiceUsedInTicket.Add(randomSpiceHolder);
-            
+
             randomSpiceNames[i] = spices[randomSpiceName].nameOfSpice;
 
             spiceNameText[i].text = randomSpiceNames[i];
 
-            float randomSpiceAmount = spices[randomSpiceName].randomMaxAmount;
+            float randomSpiceAmount = spices[randomSpiceName].startingSpiceAmount;
 
-            spiceAmount[i].text = randomSpiceAmount.ToString(); 
+            spiceAmountText[i].text = randomSpiceAmount.ToString();
+            spiceAmountDictionary[randomSpiceNames[i]] = spiceAmountText[i];
         }
     }
 
@@ -164,91 +178,124 @@ public class GenerateOrderTicket : MonoBehaviour
 
     public void SelectSpice(string spiceName)
     {
-        for(int i = 0; i < spices.Length; i++ )
+        Spice selectedSpice = spices.FirstOrDefault(spice => spice.nameOfSpice == spiceName);
+
+        if (selectedSpice != null && spiceUsedInTicket.Contains(selectedSpice))
         {
-            if (spiceName == spices[i].nameOfSpice)
+            if (!spiceSelected.Contains(selectedSpice))
             {
-                spiceSelected.Add(spices[i]);
+                spiceSelected.Insert(0, selectedSpice);
+                Debug.Log(spiceSelected[0].nameOfSpice);
             }
             else
             {
-                displayText.text = "You do not need that spice right now";
+                displayText.text = "You already selected this spice.";
             }
         }
-    }
-
-    public void ChangeSpiceAmount()
-    {
-        
-    }
-
-    [System.Serializable]
-    public class Spice
-    {
-        public string nameOfSpice;
-        public float startingSpiceAmount;
-        public float randomMaxAmount;
-
-        public Spice(string name, float startingAmount, float maxAmount)
+        else
         {
-            nameOfSpice = name;
-            startingSpiceAmount = startingAmount;
-            randomMaxAmount = maxAmount;
+            Debug.Log("Spice was not put in the list");
         }
     }
 
-    [System.Serializable]
-    public class GroundSage : Spice
+    public void PourSpice()
     {
-        public GroundSage() : base("Ground Sage", 0 , Random.Range(2000, 4001)) 
+        spiceSelected[0].startingSpiceAmount++;
+        UpdateSpiceAmount(spiceSelected[0].nameOfSpice);
+    }
+
+    void UpdateSpiceAmount(string spiceName)
+    {
+        if (spiceAmountDictionary.TryGetValue(spiceName, out TMP_Text amountText))
         {
-        
+            Spice selectedSpice = spiceSelected.FirstOrDefault(spice => spice.nameOfSpice == spiceName);
+            if (selectedSpice != null)
+            {
+                amountText.text = selectedSpice.startingSpiceAmount.ToString();
+                float spicePourPercent = Mathf.FloorToInt(100 * (selectedSpice.startingSpiceAmount / selectedSpice.randomMaxAmount));
+                displayText.text = selectedSpice.nameOfSpice + " is now " + spicePourPercent + "% full";
+            }
         }
-    }
-
-    [System.Serializable]
-    public class Tarragon : Spice
-    {
-        public Tarragon() : base("Tarragon", 0 ,  Random.Range(2000, 4001))
-        { 
-        
-        }
-    }
-
-    [System.Serializable]
-    public class DillPollen : Spice
-    {
-        public DillPollen() : base("Dill Pollen", 0 , Random.Range(2000, 4001)) 
+        else
         {
-        
+            Debug.LogError("Spice name not found in dictionary");
         }
     }
 
-    [System.Serializable]
-    public class Chervil : Spice
+    public void SetSpiceInfo(int index, string name, string amount)
     {
-        public Chervil() : base("Chervil", 0 , Random.Range(2000, 4001))
+        if (index >= 0 && index < spiceNameText.Length && index < spiceAmountText.Length)
         {
-        
+            spiceNameText[index].text = name;
+            spiceAmountText[index].text = amount;
         }
-    }
-
-    [System.Serializable]
-    public class Spearmint : Spice
-    {
-        public Spearmint() : base("Spearmint", 0 , Random.Range(2000, 4001)) 
+        else
         {
-        
+            Debug.LogError("Index out of range");
         }
     }
 
-    [System.Serializable]
-    public class Sumac : Spice
+    public (string name, string amount) GetSpiceInfo(int index)
     {
-        public Sumac() : base("Sumac", 0 , Random.Range(2000, 4001)) 
-        { 
-        
+        if (index >= 0 && index < spiceNameText.Length && index < spiceAmountText.Length)
+        {
+            return (spiceNameText[index].text, spiceAmountText[index].text);
+        }
+        else
+        {
+            Debug.LogError("Index out of range");
+            return (null, null);
         }
     }
+}
 
+[System.Serializable]
+public class Spice
+{
+    public string nameOfSpice;
+    public float startingSpiceAmount;
+    public float randomMaxAmount;
+
+    public Spice(string name, float startingAmount, float maxAmount)
+    {
+        nameOfSpice = name;
+        startingSpiceAmount = startingAmount;
+        randomMaxAmount = maxAmount;
+    }
+}
+
+[System.Serializable]
+public class GroundSage : Spice
+{
+    public GroundSage() : base("Ground Sage", 0, Random.Range(2000, 4001)) { }
+}
+
+[System.Serializable]
+public class Tarragon : Spice
+{
+    public Tarragon() : base("Tarragon", 0, Random.Range(2000, 4001)) { }
+}
+
+[System.Serializable]
+public class DillPollen : Spice
+{
+    public DillPollen() : base("Dill Pollen", 0, Random.Range(2000, 4001)) { }
+}
+
+[System.Serializable]
+public class Chervil : Spice
+{
+    public Chervil() : base("Chervil", 0, Random.Range(2000, 4001)) { }
+}
+
+[System.Serializable]
+public class Spearmint : Spice
+{
+    public Spearmint() : base("Spearmint", 0, Random.Range(2000, 4001)) { }
+}
+
+[System.Serializable]
+public class Sumac : Spice
+{
+    public Sumac() : base("Sumac", 0, Random.Range(2000, 4001)) { }
 }
