@@ -17,6 +17,7 @@ public class GenerateOrderTicket : MonoBehaviour
     [SerializeField] private float pouredAmount;
     [SerializeField] private float currentTickets;
     [SerializeField] private float ticketsCompleted;
+    [SerializeField] private float orderRotations;
 
     [Header("Array Of Classes")]
     [SerializeField] private Spice[] spices;
@@ -50,6 +51,7 @@ public class GenerateOrderTicket : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        orderRotations = 0; // what iteration of ticket player is on
         correctSelection = false;
         displayText = GameManager.instance.ReturnSpiceDisplayNameText();
 
@@ -146,7 +148,7 @@ public class GenerateOrderTicket : MonoBehaviour
 
     public void GenerateOrder()
     {
-        
+        orderRotations++;
         int randomSpiceIndex = Random.Range(2, 4);
 
         randomSpiceNames = new string[randomSpiceIndex];
@@ -157,9 +159,10 @@ public class GenerateOrderTicket : MonoBehaviour
 
             Spice randomSpiceHolder = spices[randomSpiceName];
 
-            if(spiceUsedInTicket.Count == 6)
+            if (orderRotations == 3)
             {
                 spiceUsedInTicket.Clear();
+                orderRotations = 0;
             }
 
             while (spiceUsedInTicket.Contains(randomSpiceHolder))

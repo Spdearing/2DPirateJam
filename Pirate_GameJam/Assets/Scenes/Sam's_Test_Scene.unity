@@ -7461,6 +7461,7 @@ MonoBehaviour:
   pouredAmount: 0
   currentTickets: 0
   ticketsCompleted: 0
+  orderRotations: 0
   spices: []
   spiceUsedInTicket: []
   spiceSelected: []
@@ -8088,7 +8089,7 @@ GameObject:
   - component: {fileID: 1413170842}
   - component: {fileID: 1413170841}
   m_Layer: 5
-  m_Name: ConfirmTicket (1)
+  m_Name: Generate New Order
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -8160,7 +8161,7 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 1041643373}
         m_TargetAssemblyTypeName: GenerateOrderTicket, Assembly-CSharp
-        m_MethodName: GeneratePurity
+        m_MethodName: GenerateOrder
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
