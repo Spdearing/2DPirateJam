@@ -409,19 +409,19 @@ public class Spice
 [System.Serializable]
 public class GroundSage : Spice
 {
-    public GroundSage() : base("Ground Sage", 0, Random.Range(2000, 4001), 0, new Color(0.4f, 0.9f, 0.7f, 1.0f), new Color(0.4f, 0.9f, 0.7f, 1.0f)) { }
+    public GroundSage() : base("Ground Sage", 0, Random.Range(2000, 4001), 0, new Color(1.0f, 0f, 0f, 1.0f), new Color(0f, 1f, 0f, 1.0f)) { }
 }
 
 [System.Serializable]
 public class Tarragon : Spice
 {
-    public Tarragon() : base("Tarragon", 0, Random.Range(2000, 4001), 0, new Color(0.5f, 0.8f, 0.6f, 1.0f), new Color(0.5f, 0.8f, 0.6f, 1.0f)) { }
+    public Tarragon() : base("Tarragon", 0, Random.Range(2000, 4001), 0, new Color(1f, 1f, 0f, 1.0f), new Color(1f, 1f, 1f, 1.0f)) { }
 }
 
 [System.Serializable]
 public class DillPollen : Spice
 {
-    public DillPollen() : base("Dill Pollen", 0, Random.Range(2000, 4001), 0, new Color(0.7f, 0.7f, 0.2f, 1.0f), new Color(0.7f, 0.7f, 0.2f, 1.0f)) { }
+    public DillPollen() : base("Dill Pollen", 0, Random.Range(2000, 4001), 0, new Color(0.5f, 0.5f, 0.5f, 1.0f), new Color(0f, 0f, 0f, 1.0f)) { }
 }
 
 [System.Serializable]
