@@ -9,7 +9,7 @@ public class SpiceSpawner : MonoBehaviour
     private float spiceAmount = 0f; // Keeps track of how much spice has hit the bowl
     private float spicePourPercent; // The percentage for how close the player is to the correct amount of spice
     private float elapsedTime = 0f; // Add this as a member variable to keep track of elapsed time
-    private float duration = 10f; // The total duration for ramping up particles
+    private float duration = 5f; // The total duration for ramping up particles
     [SerializeField] private GameObject spiceHolder;
     [SerializeField] private GameObject pourSpicePos;
     [SerializeField] private ParticleSystem.EmissionModule emissionModule;
@@ -22,7 +22,6 @@ public class SpiceSpawner : MonoBehaviour
     [SerializeField] private bool stillPouring;
     [SerializeField] private bool inPosition = false;
     [SerializeField] private TMP_Text spicePercentText;
-    public float temporarySpiceGoal; //The spiceAmount goal
 
     [Header("Selected Spice List")]
     [SerializeField] private List<Spice> spiceSelected;
@@ -32,7 +31,6 @@ public class SpiceSpawner : MonoBehaviour
 
     private void Start()
     {
-        temporarySpiceGoal = 2000f;
         stillPouring = false;
         pouring = false;
         //spicePercentText = GameObject.Find("SpicePercentText").GetComponent<TMP_Text>();
@@ -63,7 +61,10 @@ public class SpiceSpawner : MonoBehaviour
         //Necessary for checking if the spice hits something
         //spiceAmount++;
         //Debug.Log(spiceAmount);
-        generateTicket.PourSpice();
+        if (pouring == true || stillPouring == true)
+        {
+            generateTicket.PourSpice();
+        }
     }
     private void PourSpice()
     {
@@ -87,17 +88,17 @@ public class SpiceSpawner : MonoBehaviour
             else if (Input.GetKeyUp(KeyCode.Mouse1) && pouring)
             {
                 stillPouring = true;
-                maxParticles = 45f;
+                maxParticles = 80f;
                 elapsedTime = 0f;
             }
 
-            if (inPosition && pouring && !stillPouring && maxParticles < 1000f)
+            if (inPosition && pouring && !stillPouring && maxParticles < 2000f)
             {
                 elapsedTime += Time.deltaTime;
                 float t = Mathf.Clamp01(elapsedTime / duration);
-                float exponent = 2f;
+                float exponent = 3f;
                 t = Mathf.Pow(t, exponent);
-                maxParticles = Mathf.Lerp(minParticles, 1000, t);
+                maxParticles = Mathf.Lerp(minParticles, 2000, t);
                 emissionModule.rateOverTime = new ParticleSystem.MinMaxCurve(minParticles, maxParticles);
             }
 
@@ -140,10 +141,13 @@ public class SpiceSpawner : MonoBehaviour
         spiceHolder.transform.position = new Vector3(Mathf.Lerp(spiceHolder.transform.position.x, mousePos.x, (15f * Time.deltaTime)), Mathf.Lerp(spiceHolder.transform.position.y, mousePos.y, (15f * Time.deltaTime)), 0.0f);
     }
 
-    private void UpdateSpicePercent()
+    public bool ReturnPouringBool()
     {
-        //Calculates the percentage of how close the player is to the spice goal
-        spicePourPercent = Mathf.FloorToInt(100 * (spiceAmount / temporarySpiceGoal));
-        spicePercentText.text = spicePourPercent + "%";
+        return this.pouring;
+    }
+
+    public bool ReturnStillPouringBool()
+    {
+        return this.stillPouring;
     }
 }

@@ -774,6 +774,8 @@ MonoBehaviour:
   spiceDisplayText: {fileID: 0}
   spiceManager: {fileID: 0}
   generateTicket: {fileID: 0}
+  spiceSpawner: {fileID: 0}
+  playerScore: 0
 --- !u!224 &357611023
 RectTransform:
   m_ObjectHideFlags: 0
@@ -1090,7 +1092,7 @@ MonoBehaviour:
   stillPouring: 0
   inPosition: 0
   spicePercentText: {fileID: 0}
-  temporarySpiceGoal: 2000
+  spiceSelected: []
   generateTicket: {fileID: 0}
 --- !u!199 &478264428
 ParticleSystemRenderer:
@@ -1249,7 +1251,7 @@ ParticleSystem:
     startLifetime:
       serializedVersion: 2
       minMaxState: 0
-      scalar: 5
+      scalar: 3
       minScalar: 5
       maxCurve:
         serializedVersion: 2
@@ -1354,12 +1356,12 @@ ParticleSystem:
         m_RotationOrder: 4
     startColor:
       serializedVersion: 2
-      minMaxState: 2
+      minMaxState: 1
       minColor: {r: 1, g: 1, b: 1, a: 1}
       maxColor: {r: 1, g: 1, b: 1, a: 1}
       maxGradient:
         serializedVersion: 2
-        key0: {r: 1, g: 0, b: 0, a: 1}
+        key0: {r: 0.5357769, g: 0.5660378, b: 0.10946956, a: 1}
         key1: {r: 1, g: 0.6117803, b: 0, a: 1}
         key2: {r: 1, g: 0, b: 0, a: 0}
         key3: {r: 1, g: 0, b: 0.6604276, a: 0}
@@ -2442,7 +2444,7 @@ ParticleSystem:
       maxGradient:
         serializedVersion: 2
         key0: {r: 1, g: 1, b: 1, a: 1}
-        key1: {r: 1, g: 1, b: 1, a: 0.27450982}
+        key1: {r: 1, g: 1, b: 1, a: 0.19607843}
         key2: {r: 0, g: 0, b: 0, a: 1}
         key3: {r: 0, g: 0, b: 0, a: 0}
         key4: {r: 0, g: 0, b: 0, a: 0}
@@ -7462,11 +7464,13 @@ MonoBehaviour:
   currentTickets: 0
   ticketsCompleted: 0
   orderRotations: 0
+  playerScore: 0
   spices: []
   spiceUsedInTicket: []
   spiceSelected: []
   spiceAmountsNeeded: []
   spiceManager: {fileID: 0}
+  spiceSpawner: {fileID: 0}
   spiceNameText: []
   spiceAmountText: []
   spiceButtons: []

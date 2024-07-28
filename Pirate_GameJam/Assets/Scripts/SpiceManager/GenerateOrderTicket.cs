@@ -163,31 +163,33 @@ public class GenerateOrderTicket : MonoBehaviour
         if(orderSubmitted == false)
         {
             string spiceName = clickedButton.gameObject.name;
-
-            if (spiceUsedInTicket.Any(spice => spice.nameOfSpice == spiceName))
+            if (spiceSpawner.ReturnPouringBool() == false && spiceSpawner.ReturnStillPouringBool() == false)
             {
-                SelectSpice(spiceName);
-
-                if (displayText != null)
+                if (spiceUsedInTicket.Any(spice => spice.nameOfSpice == spiceName))
                 {
-                    displayText.text = spiceName + " has been selected";
-                    
+                    SelectSpice(spiceName);
+
+                    if (displayText != null)
+                    {
+                        displayText.text = spiceName + " has been selected";
+
+                    }
+                    else
+                    {
+                        Debug.LogError("Display text is null.");
+                    }
                 }
                 else
                 {
-                    Debug.LogError("Display text is null.");
-                }
-            }
-            else
-            {
-                if (displayText != null)
-                {
-                    correctSelection = false;
-                    displayText.text = "You do not need that spice right now";
-                }
-                else
-                {
-                    Debug.LogError("Display text is null.");
+                    if (displayText != null)
+                    {
+                        correctSelection = false;
+                        displayText.text = "You do not need that spice right now";
+                    }
+                    else
+                    {
+                        Debug.LogError("Display text is null.");
+                    }
                 }
             }
         }
@@ -295,24 +297,26 @@ public class GenerateOrderTicket : MonoBehaviour
 
     public void GeneratePurity()
     {
-        CheckOverFlow();
-
-        float totalPurity = spiceUsedInTicket.Sum(spice => spice.spicePurity);
-        float averagePurity = Mathf.FloorToInt(totalPurity / spiceUsedInTicket.Count);
-
-        
-        SubmitOrder(averagePurity);
-        UpdatePlayerScore(averagePurity);
-
-        if(successfulRatio)
+        if (spiceSpawner.ReturnPouringBool() == false && spiceSpawner.ReturnStillPouringBool() == false)
         {
-            displayText.text = currentTickets + " Current Tickets have been completed , your purity was " + averagePurity + " %, Congradulations! ";
-        }
-        else if(failedRatio)
-        {
-            displayText.text = currentTickets + " Current Tickets have been completed , your purity was " + averagePurity + " %, You did not hit the required purity ";
-        }
-        
+            CheckOverFlow();
+
+            float totalPurity = spiceUsedInTicket.Sum(spice => spice.spicePurity);
+            float averagePurity = Mathf.FloorToInt(totalPurity / spiceUsedInTicket.Count);
+
+
+            SubmitOrder(averagePurity);
+            UpdatePlayerScore(averagePurity);
+
+            if (successfulRatio)
+            {
+                displayText.text = currentTickets + " Current Tickets have been completed , your purity was " + averagePurity + " %, Congradulations! ";
+            }
+            else if (failedRatio)
+            {
+                displayText.text = currentTickets + " Current Tickets have been completed , your purity was " + averagePurity + " %, You did not hit the required purity ";
+            }
+        }  
     }
 
     public void CheckOverFlow()
