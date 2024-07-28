@@ -17,6 +17,9 @@ public class GameManager : MonoBehaviour
     [SerializeField] private SpiceSpawner spiceSpawner;
 
 
+    [Header("Floats")]
+    [SerializeField] private float playerScore = 0;
+
     void Awake()
     {
         if (instance == null)
@@ -93,6 +96,11 @@ public class GameManager : MonoBehaviour
     public SpiceSpawner ReturnSpiceSpawner()
     {
         return this.spiceSpawner;
+    }
+
+    public float ReturnPlayerScore()
+    {
+        return this.playerScore;
     }
 
     #endregion

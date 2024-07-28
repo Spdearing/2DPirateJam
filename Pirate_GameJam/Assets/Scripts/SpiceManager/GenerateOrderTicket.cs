@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -17,6 +18,7 @@ public class GenerateOrderTicket : MonoBehaviour
     [SerializeField] private float currentTickets;
     [SerializeField] private float ticketsCompleted;
     [SerializeField] private float orderRotations;
+    [SerializeField] private float playerScore;
 
     [Header("Array Of Classes")]
     [SerializeField] private Spice[] spices;
@@ -61,6 +63,7 @@ public class GenerateOrderTicket : MonoBehaviour
 
     private void Initialize()
     {
+        playerScore = GameManager.instance.ReturnPlayerScore();
         orderSubmitted = false;
         successfulRatio = false;
         failedRatio = false;
@@ -296,6 +299,7 @@ public class GenerateOrderTicket : MonoBehaviour
         float averagePurity = Mathf.FloorToInt(totalPurity / spiceUsedInTicket.Count);
 
         SubmitOrder(averagePurity);
+        UpdatePlayerScore(averagePurity);
 
         if(successfulRatio)
         {
@@ -311,6 +315,7 @@ public class GenerateOrderTicket : MonoBehaviour
     void SubmitOrder(float averagePurity)
     {
         orderSubmitted = true;
+
         if (averagePurity > 75.0f)
         {
             successfulRatio = true;
@@ -341,6 +346,24 @@ public class GenerateOrderTicket : MonoBehaviour
         {
             Debug.LogError("Spice name not found in dictionary");
         }
+    }
+
+    protected void UpdatePlayerScore(float averagePurity)
+    {
+        
+
+        if(successfulRatio)
+        {
+            playerScore += 1000 * spiceUsedInTicket.Count * (averagePurity/100);
+        }
+        else if(failedRatio)
+        {
+            playerScore += 0;
+        }
+
+        Debug.Log(playerScore);
+
+        
     }
 
     public void SetSpiceInfo(int index, string name, string amount)
