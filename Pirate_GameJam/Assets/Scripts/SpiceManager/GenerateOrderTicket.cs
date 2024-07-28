@@ -295,9 +295,12 @@ public class GenerateOrderTicket : MonoBehaviour
 
     public void GeneratePurity()
     {
+        CheckOverFlow();
+
         float totalPurity = spiceUsedInTicket.Sum(spice => spice.spicePurity);
         float averagePurity = Mathf.FloorToInt(totalPurity / spiceUsedInTicket.Count);
 
+        
         SubmitOrder(averagePurity);
         UpdatePlayerScore(averagePurity);
 
@@ -310,6 +313,33 @@ public class GenerateOrderTicket : MonoBehaviour
             displayText.text = currentTickets + " Current Tickets have been completed , your purity was " + averagePurity + " %, You did not hit the required purity ";
         }
         
+    }
+
+    public void CheckOverFlow()
+    {
+        Debug.Log("Inside Checking Over Flow");
+        Debug.Log(spiceUsedInTicket.Count);
+
+        for(int i = 0; i < spiceUsedInTicket.Count; i++)
+        {
+            Debug.Log(spiceUsedInTicket[i].spicePurity);
+            if (spiceUsedInTicket[i].spicePurity > 100.0f)
+            {
+                float spiceOverflow = spiceUsedInTicket[i].spicePurity - 100.0f;
+
+                if (spiceOverflow < 100.0f)
+                {
+                    spiceOverflow = 100.0f - spiceOverflow;
+                    spiceUsedInTicket[i].spicePurity = spiceOverflow;
+                    Debug.Log("Spice Over flow " + spiceOverflow + " % for " + spiceUsedInTicket[i].nameOfSpice);
+                }
+                else
+                {
+                    spiceOverflow = 0f;
+                    spiceUsedInTicket[i].spicePurity = spiceOverflow;
+                }
+            }
+        }
     }
 
     void SubmitOrder(float averagePurity)
