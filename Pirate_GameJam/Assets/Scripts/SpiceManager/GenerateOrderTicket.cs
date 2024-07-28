@@ -30,6 +30,7 @@ public class GenerateOrderTicket : MonoBehaviour
 
     [Header("Scripts")]
     [SerializeField] private SpiceManager spiceManager;
+    [SerializeField] private SpiceSpawner spiceSpawner;
 
     [Header("Display Texts")]
     [SerializeField] private TMP_Text[] spiceNameText;
@@ -66,6 +67,7 @@ public class GenerateOrderTicket : MonoBehaviour
         correctSelection = false;
         displayText = GameManager.instance.ReturnSpiceDisplayNameText();
         spiceManager = GameManager.instance.ReturnSpiceManager();
+        spiceSpawner = GameManager.instance.ReturnSpiceSpawner();
 
         InitializeSpiceNames();
         InitializeSpiceTexts();
@@ -151,6 +153,8 @@ public class GenerateOrderTicket : MonoBehaviour
         }
     }
 
+    
+
     private void DisplaySelectedSpice(Button clickedButton)
     {
         if(orderSubmitted == false)
@@ -164,6 +168,7 @@ public class GenerateOrderTicket : MonoBehaviour
                 if (displayText != null)
                 {
                     displayText.text = spiceName + " has been selected";
+                    
                 }
                 else
                 {
@@ -267,6 +272,7 @@ public class GenerateOrderTicket : MonoBehaviour
         {
             correctSelection = true;
             spiceSelected.Insert(0, selectedSpice);
+            spiceSpawner.ChangeSpiceParticleColor(spiceSelected[0]);
         }
         else
         {
@@ -372,6 +378,11 @@ public class GenerateOrderTicket : MonoBehaviour
     {
         return this.orderSubmitted;
     }
+
+    public List<Spice> ReturnSpiceSelected()
+    {
+         return this.spiceSelected; 
+    }
 }
 
 [System.Serializable]
@@ -381,48 +392,52 @@ public class Spice
     public float startingSpiceAmount;
     public float randomMaxAmount;
     public float spicePurity;
+    public Color color;
+    public Color color2;
 
-    public Spice(string name, float startingAmount, float maxAmount, float purity)
+    public Spice(string name, float startingAmount, float maxAmount, float purity, Color color, Color color2)
     {
-        nameOfSpice = name;
-        startingSpiceAmount = startingAmount;
-        randomMaxAmount = maxAmount;
-        spicePurity = purity;
+        this.nameOfSpice = name;
+        this.startingSpiceAmount = startingAmount;
+        this.randomMaxAmount = maxAmount;
+        this.spicePurity = purity;
+        this.color = color;
+        this.color2 = color2;
     }
 }
 
 [System.Serializable]
 public class GroundSage : Spice
 {
-    public GroundSage() : base("Ground Sage", 0, Random.Range(2000, 4001), 0) { }
+    public GroundSage() : base("Ground Sage", 0, Random.Range(2000, 4001), 0, new Color(0.4f, 0.9f, 0.7f, 1.0f), new Color(0.4f, 0.9f, 0.7f, 1.0f)) { }
 }
 
 [System.Serializable]
 public class Tarragon : Spice
 {
-    public Tarragon() : base("Tarragon", 0, Random.Range(2000, 4001), 0) { }
+    public Tarragon() : base("Tarragon", 0, Random.Range(2000, 4001), 0, new Color(0.5f, 0.8f, 0.6f, 1.0f), new Color(0.5f, 0.8f, 0.6f, 1.0f)) { }
 }
 
 [System.Serializable]
 public class DillPollen : Spice
 {
-    public DillPollen() : base("Dill Pollen", 0, Random.Range(2000, 4001), 0) { }
+    public DillPollen() : base("Dill Pollen", 0, Random.Range(2000, 4001), 0, new Color(0.7f, 0.7f, 0.2f, 1.0f), new Color(0.7f, 0.7f, 0.2f, 1.0f)) { }
 }
 
 [System.Serializable]
 public class Chervil : Spice
 {
-    public Chervil() : base("Chervil", 0, Random.Range(2000, 4001), 0) { }
+    public Chervil() : base("Chervil", 0, Random.Range(2000, 4001), 0, new Color(0.4f, 0.6f, 0.2f, 1.0f), new Color(0.4f, 0.9f, 0.7f, 1.0f)) { }
 }
 
 [System.Serializable]
 public class Spearmint : Spice
 {
-    public Spearmint() : base("Spearmint", 0, Random.Range(2000, 4001), 0) { }
+    public Spearmint() : base("Spearmint", 0, Random.Range(2000, 4001), 0, new Color(0.2f, 0.8f, 0.5f, 1.0f), new Color(0.2f, 0.8f, 0.5f, 1.0f)) { }
 }
 
 [System.Serializable]
 public class Sumac : Spice
 {
-    public Sumac() : base("Sumac", 0, Random.Range(2000, 4001), 0) { }
+    public Sumac() : base("Sumac", 0, Random.Range(2000, 4001), 0, new Color(0.8f, 0.1f, 0.3f, 1.0f), new Color(0.4f, 0.9f, 0.7f, 1.0f)) { }
 }

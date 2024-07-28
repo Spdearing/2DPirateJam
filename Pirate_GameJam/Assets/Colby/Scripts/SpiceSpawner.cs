@@ -13,6 +13,7 @@ public class SpiceSpawner : MonoBehaviour
     [SerializeField] private GameObject spiceHolder;
     [SerializeField] private GameObject pourSpicePos;
     [SerializeField] private ParticleSystem.EmissionModule emissionModule;
+    [SerializeField] private ParticleSystem.MainModule main;
     [SerializeField] private float minParticles = 0f;
     [SerializeField] private float maxParticles = 0f;
     [SerializeField] private float moveSpiceSpeed = 10f;
@@ -22,6 +23,9 @@ public class SpiceSpawner : MonoBehaviour
     [SerializeField] private bool inPosition = false;
     [SerializeField] private TMP_Text spicePercentText;
     public float temporarySpiceGoal; //The spiceAmount goal
+
+    [Header("Selected Spice List")]
+    [SerializeField] private List<Spice> spiceSelected;
 
 
     [SerializeField] private GenerateOrderTicket generateTicket;
@@ -35,9 +39,11 @@ public class SpiceSpawner : MonoBehaviour
         pourSpicePos = GameObject.Find("PourSpicePosition");
         spiceHolder = GameObject.Find("SpiceParticleHolder");
         spiceParticleSystem = GetComponent<ParticleSystem>();
+        main = spiceParticleSystem.main;
         emissionModule = spiceParticleSystem.emission;
         emissionModule.rateOverTime = new ParticleSystem.MinMaxCurve(0f, 0f);
         generateTicket = GameManager.instance.ReturnGenerateOrderTicket();
+        spiceSelected = generateTicket.ReturnSpiceSelected();
     }
     private void Update()
     {
@@ -114,6 +120,12 @@ public class SpiceSpawner : MonoBehaviour
             }
         } 
     }
+
+    public void ChangeSpiceParticleColor(Spice selectedSpice)
+    {
+        main.startColor = new ParticleSystem.MinMaxGradient(selectedSpice.color, selectedSpice.color2);
+    }
+
     private void MoveSpiceToPour()
     {
         spiceHolder.transform.position = new Vector3(Mathf.Lerp(spiceHolder.transform.position.x, pourSpicePos.transform.position.x, (moveSpiceSpeed * Time.deltaTime)), Mathf.Lerp(spiceHolder.transform.position.y, pourSpicePos.transform.position.y, (moveSpiceSpeed * Time.deltaTime)), 0f);

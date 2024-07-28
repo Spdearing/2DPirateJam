@@ -14,6 +14,7 @@ public class GameManager : MonoBehaviour
     [Header("Scripts")]
     [SerializeField] private SpiceManager spiceManager;
     [SerializeField] private GenerateOrderTicket generateTicket;
+    [SerializeField] private SpiceSpawner spiceSpawner;
 
 
     void Awake()
@@ -58,6 +59,10 @@ public class GameManager : MonoBehaviour
                 {
                     generateTicket = GameObject.Find("GeneratedTicket").GetComponent<GenerateOrderTicket>();
                 }
+                if (spiceSpawner == null)
+                {
+                    spiceSpawner = GameObject.Find("SpiceParticleSystem").GetComponent<SpiceSpawner>();
+                }
 
                 spiceDisplayText.text = string.Empty;
 
@@ -83,6 +88,11 @@ public class GameManager : MonoBehaviour
     public GenerateOrderTicket ReturnGenerateOrderTicket()
     {
         return this.generateTicket;
+    }
+
+    public SpiceSpawner ReturnSpiceSpawner()
+    {
+        return this.spiceSpawner;
     }
 
     #endregion
