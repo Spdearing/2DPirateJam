@@ -484,7 +484,7 @@ public class DillPollen : Spice
 [System.Serializable]
 public class Chervil : Spice
 {
-    public Chervil() : base("Chervil", 0, Random.Range(2000, 4001), 0, new Color(0.4f, 0.6f, 0.2f, 1.0f), new Color(0.4f, 0.9f, 0.7f, 1.0f)) { }
+    public Chervil() : base("Chervil", 0, Random.Range(2000, 4001), 0, new Color(0.2127358f, 0.4150943f, 0.03328587f, 1.0f), new Color(0.5899674f, 0.7075472f, 0.3170612f, 1.0f)) { }
 }
 
 [System.Serializable]
@@ -496,5 +496,5 @@ public class Spearmint : Spice
 [System.Serializable]
 public class Sumac : Spice
 {
-    public Sumac() : base("Sumac", 0, Random.Range(2000, 4001), 0, new Color(0.8f, 0.1f, 0.3f, 1.0f), new Color(0.4f, 0.9f, 0.7f, 1.0f)) { }
+    public Sumac() : base("Sumac", 0, Random.Range(2000, 4001), 0, new Color(0.4528302f, 0.05767177f, 0.05767177f, 1.0f), new Color(0.8392157f, 0.345098f, 0.4576187f, 1.0f)) { }
 }
