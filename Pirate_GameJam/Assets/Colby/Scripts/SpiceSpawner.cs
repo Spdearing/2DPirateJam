@@ -23,6 +23,9 @@ public class SpiceSpawner : MonoBehaviour
     [SerializeField] private bool inPosition = false;
     [SerializeField] private TMP_Text spicePercentText;
 
+    [SerializeField] private Quaternion initialSpiceRotation;
+    [SerializeField] private Quaternion currentSpiceRotation;
+
     [Header("Selected Spice List")]
     [SerializeField] private List<Spice> spiceSelected;
 
@@ -42,15 +45,16 @@ public class SpiceSpawner : MonoBehaviour
         emissionModule.rateOverTime = new ParticleSystem.MinMaxCurve(0f, 0f);
         generateTicket = GameManager.instance.ReturnGenerateOrderTicket();
         spiceSelected = generateTicket.ReturnSpiceSelected();
+        initialSpiceRotation = spiceHolder.transform.rotation;
     }
     private void Update()
     {
         PourSpice();
-        if (pouring == false)
+        if (!pouring)
         {
             MoveSpiceWithMouse();
         }
-        else if (pouring == true)
+        else if (pouring && !stillPouring)
         {
             MoveSpiceToPour();
         }
@@ -106,6 +110,7 @@ public class SpiceSpawner : MonoBehaviour
             {
                 maxParticles = Mathf.Lerp(maxParticles, -10f, (1f * Time.deltaTime));
                 emissionModule.rateOverTime = new ParticleSystem.MinMaxCurve(minParticles, maxParticles);
+                spiceHolder.transform.rotation = Quaternion.Lerp(currentSpiceRotation, initialSpiceRotation, ((maxParticles / 80f) - 1f) * -1);
             }
 
             if (maxParticles < 1 && stillPouring)
@@ -130,6 +135,8 @@ public class SpiceSpawner : MonoBehaviour
     private void MoveSpiceToPour()
     {
         spiceHolder.transform.position = new Vector3(Mathf.Lerp(spiceHolder.transform.position.x, pourSpicePos.transform.position.x, (moveSpiceSpeed * Time.deltaTime)), Mathf.Lerp(spiceHolder.transform.position.y, pourSpicePos.transform.position.y, (moveSpiceSpeed * Time.deltaTime)), 0f);
+        spiceHolder.transform.rotation = Quaternion.Lerp(spiceHolder.transform.rotation, pourSpicePos.transform.rotation, .5f * Time.deltaTime);
+        currentSpiceRotation = spiceHolder.transform.rotation;
     }
     private void MoveSpiceWithMouse()
     {
