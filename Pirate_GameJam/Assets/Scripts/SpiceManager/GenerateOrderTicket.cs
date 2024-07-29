@@ -36,13 +36,11 @@ public class GenerateOrderTicket : MonoBehaviour
 
     [Header("Display Texts")]
     [SerializeField] private TMP_Text[] spiceNameText;
+    [SerializeField] private TMP_Text[] spiceNameText2;
     [SerializeField] private TMP_Text[] spiceAmountText;
 
     [Header("Buttons")]
     [SerializeField] private Button[] spiceButtons;
-
-    [Header("TMP_Text")]
-    [SerializeField] private TMP_Text displayText;
 
     [Header("Bools")]
     [SerializeField] private bool pourButtonPressed;
@@ -68,7 +66,6 @@ public class GenerateOrderTicket : MonoBehaviour
         successfulRatio = false;
         failedRatio = false;
         correctSelection = false;
-        displayText = GameManager.instance.ReturnSpiceDisplayNameText();
         spiceSpawner = GameManager.instance.ReturnSpiceSpawner();
 
         InitializeSpiceNames();
@@ -91,10 +88,16 @@ public class GenerateOrderTicket : MonoBehaviour
         spiceNameText[1] = GameObject.Find("SpiceTwo").GetComponent<TMP_Text>();
         spiceNameText[2] = GameObject.Find("SpiceThree").GetComponent<TMP_Text>();
 
+        spiceNameText2 = new TMP_Text[3];
+        spiceNameText2[0] = GameObject.Find("SpiceOne2").GetComponent<TMP_Text>();
+        spiceNameText2[1] = GameObject.Find("SpiceTwo2").GetComponent<TMP_Text>();
+        spiceNameText2[2] = GameObject.Find("SpiceThree2").GetComponent<TMP_Text>();
+
         spiceAmountText = new TMP_Text[3];
         spiceAmountText[0] = GameObject.Find("SpiceAmountOne").GetComponent<TMP_Text>();
         spiceAmountText[1] = GameObject.Find("SpiceAmountTwo").GetComponent<TMP_Text>();
         spiceAmountText[2] = GameObject.Find("SpiceAmountThree").GetComponent<TMP_Text>();
+
     }
 
     private void InitializeSpices()
@@ -150,6 +153,7 @@ public class GenerateOrderTicket : MonoBehaviour
     private void CreateSpiceAmountDictionary()
     {
         spiceAmountDictionary = new Dictionary<string, TMP_Text>();
+
         for (int i = 0; i < spiceNameText.Length; i++)
         {
             if (!string.IsNullOrEmpty(spiceNameText[i].text))
@@ -166,33 +170,12 @@ public class GenerateOrderTicket : MonoBehaviour
         if(orderSubmitted == false)
         {
             string spiceName = clickedButton.gameObject.name;
+
             if (spiceSpawner.ReturnPouringBool() == false && spiceSpawner.ReturnStillPouringBool() == false)
             {
                 if (spiceUsedInTicket.Any(spice => spice.nameOfSpice == spiceName))
                 {
                     SelectSpice(spiceName);
-
-                    if (displayText != null)
-                    {
-                        displayText.text = spiceName + " has been selected";
-
-                    }
-                    else
-                    {
-                        Debug.LogError("Display text is null.");
-                    }
-                }
-                else
-                {
-                    if (displayText != null)
-                    {
-                        correctSelection = false;
-                        displayText.text = "You do not need that spice right now";
-                    }
-                    else
-                    {
-                        Debug.LogError("Display text is null.");
-                    }
                 }
             }
         }
@@ -202,7 +185,6 @@ public class GenerateOrderTicket : MonoBehaviour
     {
         correctSelection = false;
         orderSubmitted = false;
-        displayText.text = string.Empty;
         InitializeSpices();
         ResetRatioCheck();
         spiceUsedInTicket.Clear();
@@ -211,6 +193,7 @@ public class GenerateOrderTicket : MonoBehaviour
         if(randomSpiceIndex == 2)
         {
             spiceNameText[2].text = string.Empty;
+            spiceNameText2[2].text = string.Empty;
             spiceAmountText[2].text = string.Empty;
         }
 
@@ -232,6 +215,7 @@ public class GenerateOrderTicket : MonoBehaviour
             spiceUsedInTicket.Add(randomSpiceHolder);
             randomSpiceNames[i] = randomSpiceHolder.nameOfSpice;
             spiceNameText[i].text = randomSpiceNames[i];
+            spiceNameText2[i].text = randomSpiceNames[i];
 
             float randomSpiceAmount = randomSpiceHolder.startingSpiceAmount;
             spiceAmountText[i].text = randomSpiceAmount.ToString();
@@ -310,15 +294,6 @@ public class GenerateOrderTicket : MonoBehaviour
 
             SubmitOrder(averagePurity);
             UpdatePlayerScore(averagePurity);
-
-            if (successfulRatio)
-            {
-                displayText.text = currentTickets + " Current Tickets have been completed , your purity was " + averagePurity + " %, Congradulations! ";
-            }
-            else if (failedRatio)
-            {
-                displayText.text = currentTickets + " Current Tickets have been completed , your purity was " + averagePurity + " %, You did not hit the required purity ";
-            }
         }  
     }
 
@@ -367,12 +342,17 @@ public class GenerateOrderTicket : MonoBehaviour
         if (spiceAmountDictionary.TryGetValue(spiceName, out TMP_Text amountText))
         {
             Spice selectedSpice = spiceSelected.FirstOrDefault(spice => spice.nameOfSpice == spiceName);
+
             if (selectedSpice != null)
             {
-                amountText.text = selectedSpice.startingSpiceAmount.ToString();
+                //amountText.text = selectedSpice.startingSpiceAmount.ToString();
+
                 float spicePourPercent = Mathf.FloorToInt(100 * (selectedSpice.startingSpiceAmount / selectedSpice.randomMaxAmount));
-                displayText.text = selectedSpice.nameOfSpice + " is now " + spicePourPercent + "% full";
+
+                //displayText.text = selectedSpice.nameOfSpice + " is now " + spicePourPercent + "% full";
                 spiceSelected[0].spicePurity = spicePourPercent;
+
+                amountText.text = spicePourPercent.ToString() + "%";
             }
         }
         else
