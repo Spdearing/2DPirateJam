@@ -383,15 +383,15 @@ public class GenerateOrderTicket : MonoBehaviour
 
     protected void UpdatePlayerScore(float averagePurity)
     {
-        
-
         if(successfulRatio)
         {
             playerScore += 1000 * spiceUsedInTicket.Count * (averagePurity/100);
+            GameManager.instance.UpdatePlayerScore(playerScore);
         }
         else if(failedRatio)
         {
             playerScore += 0;
+            GameManager.instance.UpdatePlayerScore(playerScore);
         }
 
         Debug.Log(playerScore);

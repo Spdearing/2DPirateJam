@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using UnityEngine.SocialPlatforms.Impl;
 
 public class GameManager : MonoBehaviour
 {
@@ -10,6 +11,7 @@ public class GameManager : MonoBehaviour
 
     [Header("TMPro")]
     [SerializeField] private TMP_Text spiceDisplayText;
+    [SerializeField] private TMP_Text playerScoreText;
 
     [Header("Scripts")]
     [SerializeField] private GenerateOrderTicket generateTicket;
@@ -41,7 +43,6 @@ public class GameManager : MonoBehaviour
         SceneManager.sceneLoaded -= OnSceneLoaded;
     }
 
-
     private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
     {
         switch (scene.name)
@@ -60,11 +61,22 @@ public class GameManager : MonoBehaviour
                 {
                     spiceSpawner = GameObject.Find("SpiceParticleSystem").GetComponent<SpiceSpawner>();
                 }
+                if (playerScoreText == null)
+                {
+                    playerScoreText = GameObject.Find("PlayerScoreText").GetComponent<TMP_Text>();
+                }
 
                 spiceDisplayText.text = string.Empty;
 
+                playerScoreText.text = "Score: " + playerScore;
+
                 break;
         }
+    }
+
+    public void UpdatePlayerScore(float playerScore)
+    {
+        playerScoreText.text = "Score: " + playerScore;
     }
 
     #region // Return Variables
