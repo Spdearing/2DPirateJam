@@ -27,23 +27,6 @@ public class SpiceManager : MonoBehaviour
 
     void Start()
     {
-        // Initialize the spiceButtons array with the correct size
-        spiceButtons = new Button[6];
-        spiceButtons[0] = GameObject.Find("Ground Sage").GetComponent<Button>();
-        spiceButtons[1] = GameObject.Find("Tarragon").GetComponent<Button>();
-        spiceButtons[2] = GameObject.Find("Dill Pollen").GetComponent<Button>();
-        spiceButtons[3] = GameObject.Find("Chervil").GetComponent<Button>();
-        spiceButtons[4] = GameObject.Find("Spearmint").GetComponent<Button>();
-        spiceButtons[5] = GameObject.Find("Sumac").GetComponent<Button>();
-
-        spiceNames = new string[6];
-        spiceNames[0] = "Ground Sage";
-        spiceNames[1] = "Tarragon";
-        spiceNames[2] = "Dill Pollen";
-        spiceNames[3] = "Chervil";
-        spiceNames[4] = "Spearmint";
-        spiceNames[5] = "Sumac";
-
         spicePicked = new bool[6];
         spicePicked[0] = false;
         spicePicked[1] = false;

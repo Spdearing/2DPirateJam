@@ -69,7 +69,6 @@ public class GenerateOrderTicket : MonoBehaviour
         failedRatio = false;
         correctSelection = false;
         displayText = GameManager.instance.ReturnSpiceDisplayNameText();
-        spiceManager = GameManager.instance.ReturnSpiceManager();
         spiceSpawner = GameManager.instance.ReturnSpiceSpawner();
 
         InitializeSpiceNames();
@@ -82,7 +81,7 @@ public class GenerateOrderTicket : MonoBehaviour
 
     private void InitializeSpiceNames()
     {
-        spiceNames = new string[6];
+        spiceNames = new string[8];
     }
 
     private void InitializeSpiceTexts()
@@ -100,24 +99,28 @@ public class GenerateOrderTicket : MonoBehaviour
 
     private void InitializeSpices()
     {
-        spices = new Spice[6];
-        spices[0] = new GroundSage();
-        spices[1] = new Tarragon();
-        spices[2] = new DillPollen();
-        spices[3] = new Chervil();
-        spices[4] = new Spearmint();
-        spices[5] = new Sumac();
+        spices = new Spice[8];
+        spices[0] = new Palfnir();
+        spices[1] = new Brikkol();
+        spices[2] = new Tenalc();
+        spices[3] = new Gremlock();
+        spices[4] = new Sewort();
+        spices[5] = new Ezethaxis();
+        spices[6] = new Aidleqar_Sap();
+        spices[7] = new Ully();
     }
 
     private void InitializeButtons()
     {
-        spiceButtons = new Button[6];
-        spiceButtons[0] = GameObject.Find("Ground Sage").GetComponent<Button>();
-        spiceButtons[1] = GameObject.Find("Tarragon").GetComponent<Button>();
-        spiceButtons[2] = GameObject.Find("Dill Pollen").GetComponent<Button>();
-        spiceButtons[3] = GameObject.Find("Chervil").GetComponent<Button>();
-        spiceButtons[4] = GameObject.Find("Spearmint").GetComponent<Button>();
-        spiceButtons[5] = GameObject.Find("Sumac").GetComponent<Button>();
+        spiceButtons = new Button[8];
+        spiceButtons[0] = GameObject.Find("Palfnir").GetComponent<Button>();
+        spiceButtons[1] = GameObject.Find("Brikkol").GetComponent<Button>();
+        spiceButtons[2] = GameObject.Find("Tenalc").GetComponent<Button>();
+        spiceButtons[3] = GameObject.Find("Gremlock").GetComponent<Button>();
+        spiceButtons[4] = GameObject.Find("Sewort").GetComponent<Button>();
+        spiceButtons[5] = GameObject.Find("Ezethaxis").GetComponent<Button>();
+        spiceButtons[6] = GameObject.Find("Aidleqar Sap").GetComponent<Button>();
+        spiceButtons[7] = GameObject.Find("Ully").GetComponent<Button>();
 
         foreach (Button button in spiceButtons)
         {
@@ -265,7 +268,7 @@ public class GenerateOrderTicket : MonoBehaviour
     {
         for (int i = 0; i < spiceNames.Length; i++)
         {
-            spiceNames[i] = spiceManager.ReturnSpiceNames(i);
+            spiceNames[i] = spices[i].nameOfSpice;
         }
     }
 
@@ -321,12 +324,8 @@ public class GenerateOrderTicket : MonoBehaviour
 
     public void CheckOverFlow()
     {
-        Debug.Log("Inside Checking Over Flow");
-        Debug.Log(spiceUsedInTicket.Count);
-
         for(int i = 0; i < spiceUsedInTicket.Count; i++)
         {
-            Debug.Log(spiceUsedInTicket[i].spicePurity);
             if (spiceUsedInTicket[i].spicePurity > 100.0f)
             {
                 float spiceOverflow = spiceUsedInTicket[i].spicePurity - 100.0f;
@@ -464,37 +463,48 @@ public class Spice
 }
 
 [System.Serializable]
-public class GroundSage : Spice
+public class Palfnir : Spice
 {
-    public GroundSage() : base("Ground Sage", 0, Random.Range(2000, 4001), 0, new Color(1.0f, 0f, 0f, 1.0f), new Color(0f, 1f, 0f, 1.0f)) { }
+    public Palfnir() : base("Palfnir", 0, Random.Range(2000, 4001), 0, new Color(1.0f, 0f, 0f, 1.0f), new Color(0f, 1f, 0f, 1.0f)) { }
 }
 
 [System.Serializable]
-public class Tarragon : Spice
+public class Brikkol : Spice
 {
-    public Tarragon() : base("Tarragon", 0, Random.Range(2000, 4001), 0, new Color(1f, 1f, 0f, 1.0f), new Color(1f, 1f, 1f, 1.0f)) { }
+    public Brikkol() : base("Brikkol", 0, Random.Range(2000, 4001), 0, new Color(1f, 1f, 0f, 1.0f), new Color(1f, 1f, 1f, 1.0f)) { }
 }
 
 [System.Serializable]
-public class DillPollen : Spice
+public class Tenalc : Spice
 {
-    public DillPollen() : base("Dill Pollen", 0, Random.Range(2000, 4001), 0, new Color(0.5f, 0.5f, 0.5f, 1.0f), new Color(0f, 0f, 0f, 1.0f)) { }
+    public Tenalc() : base("Tenalc", 0, Random.Range(2000, 4001), 0, new Color(0.5f, 0.5f, 0.5f, 1.0f), new Color(0f, 0f, 0f, 1.0f)) { }
 }
 
 [System.Serializable]
-public class Chervil : Spice
+public class Gremlock : Spice
 {
-    public Chervil() : base("Chervil", 0, Random.Range(2000, 4001), 0, new Color(0.2127358f, 0.4150943f, 0.03328587f, 1.0f), new Color(0.5899674f, 0.7075472f, 0.3170612f, 1.0f)) { }
+    public Gremlock() : base("Gremlock", 0, Random.Range(2000, 4001), 0, new Color(0.2127358f, 0.4150943f, 0.03328587f, 1.0f), new Color(0.5899674f, 0.7075472f, 0.3170612f, 1.0f)) { }
 }
 
 [System.Serializable]
-public class Spearmint : Spice
+public class Sewort : Spice
 {
-    public Spearmint() : base("Spearmint", 0, Random.Range(2000, 4001), 0, new Color(0.2f, 0.8f, 0.5f, 1.0f), new Color(0.2f, 0.8f, 0.5f, 1.0f)) { }
+    public Sewort() : base("Sewort", 0, Random.Range(2000, 4001), 0, new Color(0.2f, 0.8f, 0.5f, 1.0f), new Color(0.2f, 0.8f, 0.5f, 1.0f)) { }
 }
 
 [System.Serializable]
-public class Sumac : Spice
+public class Ezethaxis : Spice
 {
-    public Sumac() : base("Sumac", 0, Random.Range(2000, 4001), 0, new Color(0.4528302f, 0.05767177f, 0.05767177f, 1.0f), new Color(0.8392157f, 0.345098f, 0.4576187f, 1.0f)) { }
+    public Ezethaxis() : base("Ezethaxis", 0, Random.Range(2000, 4001), 0, new Color(0.4528302f, 0.05767177f, 0.05767177f, 1.0f), new Color(0.8392157f, 0.345098f, 0.4576187f, 1.0f)) { }
+}
+
+public class Aidleqar_Sap : Spice
+{
+    public Aidleqar_Sap() : base("Aidleqar Sap", 0, Random.Range(2000, 4001), 0, new Color(0.2f, 0.8f, 0.5f, 1.0f), new Color(0.2f, 0.8f, 0.5f, 1.0f)) { }
+}
+
+[System.Serializable]
+public class Ully : Spice
+{
+    public Ully() : base("Ully", 0, Random.Range(2000, 4001), 0, new Color(0.4528302f, 0.05767177f, 0.05767177f, 1.0f), new Color(0.8392157f, 0.345098f, 0.4576187f, 1.0f)) { }
 }

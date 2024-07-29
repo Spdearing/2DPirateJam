@@ -12,7 +12,6 @@ public class GameManager : MonoBehaviour
     [SerializeField] private TMP_Text spiceDisplayText;
 
     [Header("Scripts")]
-    [SerializeField] private SpiceManager spiceManager;
     [SerializeField] private GenerateOrderTicket generateTicket;
     [SerializeField] private SpiceSpawner spiceSpawner;
 
@@ -53,11 +52,6 @@ public class GameManager : MonoBehaviour
                 {
                     spiceDisplayText = GameObject.Find("DisplayText").GetComponent<TMP_Text>();
                 }
-
-                if(spiceManager == null)
-                {
-                    spiceManager = GameObject.Find("SpiceManager").GetComponent<SpiceManager>();
-                }
                 if (generateTicket == null)
                 {
                     generateTicket = GameObject.Find("GeneratedTicket").GetComponent<GenerateOrderTicket>();
@@ -81,11 +75,6 @@ public class GameManager : MonoBehaviour
             Debug.LogError("Spice Display Text is not assigned.");
         }
         return this.spiceDisplayText;
-    }
-
-    public SpiceManager ReturnSpiceManager()
-    {
-        return this.spiceManager;
     }
 
     public GenerateOrderTicket ReturnGenerateOrderTicket()
