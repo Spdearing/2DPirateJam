@@ -49,22 +49,23 @@ public class SpiceSpawner : MonoBehaviour
     }
     private void Update()
     {
-        PourSpice();
+        if (generateTicket.ReturnSpiceUsedBool() == false)
+        {
+            PourSpice();
+        }
+
         if (!pouring)
         {
             MoveSpiceWithMouse();
         }
-        else if (pouring && !stillPouring)
+        else if (pouring && !stillPouring && generateTicket.ReturnSpiceUsedBool() == false)
         {
             MoveSpiceToPour();
         }
-        //UpdateSpicePercent();
     }
     void OnParticleCollision(GameObject other)
     {
         //Necessary for checking if the spice hits something
-        //spiceAmount++;
-        //Debug.Log(spiceAmount);
         if (pouring == true || stillPouring == true)
         {
             generateTicket.PourSpice();
@@ -89,7 +90,7 @@ public class SpiceSpawner : MonoBehaviour
             {
                 pouring = true;
             }
-            else if (Input.GetKeyUp(KeyCode.Mouse1) && pouring)
+            else if (Input.GetKeyUp(KeyCode.Mouse1) && pouring && !stillPouring)
             {
                 stillPouring = true;
                 maxParticles = 80f;
@@ -123,6 +124,8 @@ public class SpiceSpawner : MonoBehaviour
             {
                 pouring = false;
                 stillPouring = false;
+                generateTicket.ReturnSpiceSelected().Clear();
+                generateTicket.SetSpiceUsedBool(true);
             }
         } 
     }

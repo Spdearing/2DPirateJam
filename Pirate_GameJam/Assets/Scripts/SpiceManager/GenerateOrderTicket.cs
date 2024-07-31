@@ -48,6 +48,7 @@ public class GenerateOrderTicket : MonoBehaviour
     [SerializeField] private bool successfulRatio;
     [SerializeField] private bool failedRatio;
     [SerializeField] private bool orderSubmitted;
+    [SerializeField] private bool spiceHasBeenUsed;
 
     private Dictionary<string, TMP_Text> spiceAmountDictionary;
 
@@ -61,6 +62,7 @@ public class GenerateOrderTicket : MonoBehaviour
 
     private void Initialize()
     {
+        spiceHasBeenUsed = false;
         playerScore = GameManager.instance.ReturnPlayerScore();
         orderSubmitted = false;
         successfulRatio = false;
@@ -128,6 +130,7 @@ public class GenerateOrderTicket : MonoBehaviour
         foreach (Button button in spiceButtons)
         {
             button.onClick.AddListener(() => DisplaySelectedSpice(button));
+            button.interactable = true;
         }
     }
 
@@ -175,6 +178,8 @@ public class GenerateOrderTicket : MonoBehaviour
             {
                 if (spiceUsedInTicket.Any(spice => spice.nameOfSpice == spiceName))
                 {
+                    spiceHasBeenUsed = false;
+                    clickedButton.interactable = false;
                     SelectSpice(spiceName);
                 }
             }
@@ -218,7 +223,8 @@ public class GenerateOrderTicket : MonoBehaviour
             spiceNameText2[i].text = randomSpiceNames[i];
 
             float randomSpiceAmount = randomSpiceHolder.startingSpiceAmount;
-            spiceAmountText[i].text = randomSpiceAmount.ToString();
+            spiceAmountText[i].color = new Color(0.8113208f, 0.3559096f, 0.3559096f, 1f);
+            spiceAmountText[i].text = randomSpiceAmount.ToString() + "%";
             spiceAmountDictionary[randomSpiceNames[i]] = spiceAmountText[i];
         }
     }
@@ -282,6 +288,12 @@ public class GenerateOrderTicket : MonoBehaviour
         }
     }
 
+    IEnumerator EndOfRound()
+    {
+        yield return new WaitForSeconds(1f);
+        GenerateOrder();
+    }
+
     public void GeneratePurity()
     {
         if (spiceSpawner.ReturnPouringBool() == false && spiceSpawner.ReturnStillPouringBool() == false)
@@ -294,6 +306,8 @@ public class GenerateOrderTicket : MonoBehaviour
 
             SubmitOrder(averagePurity);
             UpdatePlayerScore(averagePurity);
+            StartCoroutine(EndOfRound());
+            InitializeButtons();
         }  
     }
 
@@ -345,14 +359,24 @@ public class GenerateOrderTicket : MonoBehaviour
 
             if (selectedSpice != null)
             {
-                //amountText.text = selectedSpice.startingSpiceAmount.ToString();
-
                 float spicePourPercent = Mathf.FloorToInt(100 * (selectedSpice.startingSpiceAmount / selectedSpice.randomMaxAmount));
 
-                //displayText.text = selectedSpice.nameOfSpice + " is now " + spicePourPercent + "% full";
                 spiceSelected[0].spicePurity = spicePourPercent;
 
                 amountText.text = spicePourPercent.ToString() + "%";
+
+                if (spicePourPercent <= 100f)
+                {
+                    amountText.color = Color.Lerp(new Color(0.8113208f, 0.3559096f, 0.3559096f, 1f), new Color(0.1933962f, 1f, 0.4519076f, 1f), spicePourPercent / 100f);
+                }
+                else if (spicePourPercent <= 150f)
+                {
+                    amountText.color = Color.Lerp(new Color(0.1933962f, 1f, 0.4519076f, 1f), new Color(0.7924528f, 0.2631899f, 0.1158775f, 1f), (spicePourPercent - 100f) / 50f);
+                }
+                else if (spicePourPercent <= 200f)
+                {
+                    amountText.color = Color.Lerp(new Color(0.7924528f, 0.2631899f, 0.1158775f, 1f), new Color(0.1981132f, 0.01958212f, 0.01214846f, 1f), (spicePourPercent - 150f) / 50f);
+                }
             }
         }
         else
@@ -419,6 +443,16 @@ public class GenerateOrderTicket : MonoBehaviour
     {
          return this.spiceSelected; 
     }
+
+    public bool ReturnSpiceUsedBool()
+    {
+        return this.spiceHasBeenUsed;
+    }
+
+    public void SetSpiceUsedBool(bool value)
+    {
+        spiceHasBeenUsed = value;
+    }
 }
 
 [System.Serializable]
@@ -441,6 +475,7 @@ public class Spice
         this.color2 = color2;
     }
 }
+
 
 [System.Serializable]
 public class Palfnir : Spice
